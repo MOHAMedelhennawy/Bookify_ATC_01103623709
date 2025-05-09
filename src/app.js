@@ -7,6 +7,8 @@ import { rateLimit } from "express-rate-limit";
 import { PrismaClient } from "@prisma/client";
 import logger from "./utils/logger.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import AppError from "./utils/AppError.js";
 
@@ -63,7 +65,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use("/", authRouter);
 app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // 404 Handler
 app.all(/(.*)/, (req, res, next) => {

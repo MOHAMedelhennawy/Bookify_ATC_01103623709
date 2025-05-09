@@ -55,6 +55,8 @@ model Booking {
   eventId  String
   user     User             @relation(fields: [userId], references: [id])
   event    Event            @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
 }
 
 // Enum for user role

@@ -38,14 +38,42 @@ export const getEventByIdServices = (id) => {
 
 export const addNewEventServices = (data) => {
 	return handlePrismaQuery(async () => {
-		// Get user
-		// check user privilege, if is not admin throw error
-
 		if (!data || typeof data !== "object") {
 			throw new AppError(
 				"Missing event data",
 				400,
 				"The request is missing required event data. Please ensure all necessary fields are provided.",
+				true,
+			);
+		}
+
+		// Get user
+		if (!data.user || !data.user.id) {
+			throw new AppError(
+				"Missing user id",
+				400,
+				"The request is missing user id",
+				true,
+			);
+		}
+
+		const user = await prisma.user.findUnique({ where: { id: data.user.id } });
+
+		if (!user) {
+			throw new AppError(
+				`No user found with ID: ${data.user.id}`,
+				400,
+				"Make sure that user ID is correct",
+				true,
+			);
+		}
+
+		// Check admin privilege
+		if (user.role !== "ADMIN") {
+			throw new AppError(
+				"Unauthorized",
+				403,
+				"Only admins can create events",
 				true,
 			);
 		}
@@ -108,7 +136,7 @@ export const updateEventByIdServices = (id, data) => {
 };
 
 export const deleteEventByIdServices = (id) => {
-	handlePrismaQuery(async () => {
+	return handlePrismaQuery(async () => {
 		if (!id || typeof id !== "string" || id.trim() === "") {
 			throw new AppError(
 				"Event id is missing!",
