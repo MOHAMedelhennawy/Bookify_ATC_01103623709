@@ -1,3 +1,5 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -15,6 +17,9 @@ import AppError from "./utils/AppError.js";
 const app = express();
 const prisma = new PrismaClient();
 const morganFormat = ":method :url :status :response-time ms";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.set("views", path.join(__dirname, "../views"));
 
 // Global Middlewares
 app.use(cors());
@@ -50,7 +55,7 @@ const limiter = rateLimit({
 	standardHeaders: "draft-8",
 	legacyHeaders: false,
 });
-app.use(limiter);
+// app.use(limiter);
 
 app.use((req, res, next) => {
 	console.log("Incoming request path:", req.url);
@@ -68,7 +73,9 @@ app.use((req, res, next) => {
 app.use("/", authRouter);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
-
+app.get("/", (req, res) => {
+	res.render("home");
+});
 // 404 Handler
 app.all(/(.*)/, (req, res, next) => {
 	next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));

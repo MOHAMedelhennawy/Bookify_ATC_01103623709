@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* background-color: #f5f5f5; */
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  padding: .9rem 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+}
+
+.navbar .navbar-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 25rem;
+}
+
+.navbar-left .brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 7.5rem;
+}
+
+.navbar-left .nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15rem;
+}
+
+.navbar-left .brand-name {
+    color: #4973ff;
+    font-family: Playfair Display, serif;
+    font-weight: 600;
+    font-size: 1.7rem;
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+}
+
+nav {
+  width: 17rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar nav a,
+.navbar .btn {
+  margin-left: .4rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar .navbar-left a {
+  color: rgb(242, 243, 245);
+  text-decoration: none;
+  margin: auto;
+}
+
+nav .login{
+  width: 69px;
+  height: 33px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #4973ff;
+  border-radius: 0.375rem;
+  border: rgb(209 213 219) solid 1px;
+  background-color: #ffffff;
+}
+
+nav .register {
+  color: white;
+  background-color: #4973ff;
+  width: 80px;
+  height: 33px;
+  border: none;
+  border-radius: 0.375rem;
+}
+
+.navbar .navbar-left a:hover {
+  color: #4973ff;
+  transition: .5s;
+}
+
+nav .login:hover {
+  background-color: rgb(245, 245, 245);
+  transition: .5s;
+}
+
+nav .register:hover {
+  background-color: rgb(86, 88, 211);
+  transition: .5s;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}

@@ -8,9 +8,16 @@ import {
 
 const router = express.Router();
 
-// router.get("/login");
+router.get("/login", (req, res) => {
+	res.render("login");
+});
+
 router.post("/login", validateSchema(loginSchema), loginPost);
-// router.get("/signup");
+
+router.get("/signup", (req, res) => {
+	res.render("signup");
+});
+
 router.post("/signup", validateSchema(signupSchema), signupPost);
 
 export default router;
