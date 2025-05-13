@@ -32,5 +32,15 @@ services:
       timeout: 5s
       retries: 5
 
+  # frontend:
+  #   image: node:20
+  #   working_dir: /p
+  #   volumes:
+  #     - ./frontend:/frontend
+  #   ports:
+  #     - "3000:3000"
+  #   command: npx http-server -p 3000
+
+
 volumes:
   pgdata-dev:

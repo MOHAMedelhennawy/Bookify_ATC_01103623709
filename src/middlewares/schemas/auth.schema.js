@@ -27,7 +27,7 @@ export const signupSchema = {
 			type: "string",
 			minLength: 10,
 			maxLength: 50,
-			pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{10,50}$",
+			// pattern: "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{10,50}$",
 			errorMessage: {
 				pattern:
 					"Password must contain at least one number and one special character (!@#$%^&*).",

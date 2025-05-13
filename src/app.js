@@ -13,6 +13,7 @@ import authRouter from "./routes/authRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import AppError from "./utils/AppError.js";
+import { checkCurrentUser } from "./middlewares/authMW.js";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -70,12 +71,14 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get(/(.*)/, checkCurrentUser);
 app.use("/", authRouter);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.get("/", (req, res) => {
 	res.render("home");
 });
+
 // 404 Handler
 app.all(/(.*)/, (req, res, next) => {
 	next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));

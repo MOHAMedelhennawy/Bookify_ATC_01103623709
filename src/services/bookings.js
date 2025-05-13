@@ -118,7 +118,7 @@ export const deleteBookingService = (userId, eventId) => {
 			);
 		}
 
-		const event = await prisma.Event.findUnique({ where: { eventId } });
+		const event = await prisma.Event.findUnique({ where: { id: eventId } });
 
 		if (!event) {
 			throw new AppError(

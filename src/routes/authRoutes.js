@@ -1,5 +1,9 @@
 import express from "express";
-import { loginPost, signupPost } from "../controller/authController.js";
+import {
+	loginPost,
+	signupPost,
+	logoutGet,
+} from "../controller/authController.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 import {
 	loginSchema,
@@ -18,6 +22,8 @@ router.get("/signup", (req, res) => {
 	res.render("signup");
 });
 
-router.post("/signup", validateSchema(signupSchema), signupPost);
+router.post("/api/signup", validateSchema(signupSchema), signupPost);
+
+router.get("/logout", logoutGet);
 
 export default router;

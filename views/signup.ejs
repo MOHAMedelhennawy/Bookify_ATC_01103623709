@@ -2,22 +2,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Material+Symbols+Outlined" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script type="module" src="/javascript/pages/signupPage.js"></script>
 <body>
     <div class="auth-container">
         <div class="card">
             <span class="material-symbols-outlined icon">calendar_month</span>
             <h2>Welcome Back</h2>
             <p>Sign in to your account to continue</p>
-            <form>
-                <input type="name" placeholder="Enter your name" required />
-                <input type="email" placeholder="Enter your email" required />
-                <input type="password" placeholder="Enter your password" required />
+            <form method="POST" action="/api/signup" novalidate>
+                <!-- Name -->
+                <input id="name" name="name" class="name-field" type="text" placeholder="Enter your name" required />
+                <div class="error-message name-error"></div>
+
+                <!-- Email -->
+                <input id="email" name="email" class="email-field" type="email" placeholder="Enter your email" required />
+                <div class="error-message email-error"></div>
+
+                <!-- Password -->
+                <input id="password" name="password" class="password-field" type="password" placeholder="Enter your password" required />
+                <div class="error-message password-error"></div>
+
                 <button type="submit">Sign In</button>
             </form>
             <div class="footer">

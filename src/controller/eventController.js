@@ -7,13 +7,19 @@ import {
 	updateEventByIdServices,
 	deleteEventByIdServices,
 } from "../services/events.js";
+import { getQueryObject } from "../utils/getQuery.js";
 
 export const getAllEventsController = catchAsync(async (req, res) => {
-	const events = await getAllEventsServices();
+	// Pagination, filteration, sorting
+	const queryObject = getQueryObject(req);
+	const { events, count } = await getAllEventsServices(queryObject);
 
 	res.status(200).json({
 		message: "Events fetched successfully",
+		page: req.query.page || 1,
+		limit: queryObject.take,
 		events,
+		count,
 	});
 
 	logger.info("Events fetched successfully");

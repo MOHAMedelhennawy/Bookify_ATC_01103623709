@@ -5,8 +5,31 @@ import AppError from "../utils/AppError.js";
 
 const prisma = new PrismaClient();
 
-export const getAllEventsServices = async () => {
-	return await handlePrismaQuery(() => prisma.Event.findMany());
+export const getAllEventsServices = async (queryObject) => {
+	return await handlePrismaQuery(async () => {
+		const count = await prisma.event.count({
+			skip: queryObject.skip,
+			take: queryObject.take,
+			where: queryObject.where,
+			orderBy: queryObject.orderBy,
+		});
+
+		const events = await prisma.Event.findMany({
+			skip: queryObject.skip,
+			take: queryObject.take,
+			where: queryObject.where,
+			include: {
+				category: {
+					select: {
+						name: true,
+					},
+				},
+			},
+			orderBy: queryObject.orderBy,
+		});
+
+		return { events, count };
+	});
 };
 
 export const getEventByIdServices = (id) => {

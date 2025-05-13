@@ -26,12 +26,22 @@ model User {
   bookings  Booking[]
 }
 
+model Category {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  createdAt   DateTime    @default(now())
+  events      Event[]
+}
+
 model Event {
   id          String       @id @default(uuid())
   title       String
   description String
-  category    String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  categoryId  String
   date        DateTime
+  address     String
+  location     String
   venue       String
   price       Float
   imageUrl    String
@@ -43,6 +53,11 @@ model Event {
 
   // Relations
   bookings    Booking[]
+
+  // indexes
+  @@index([categoryId])
+  @@index([date])
+
 }
 
 model Booking {
@@ -57,6 +72,11 @@ model Booking {
   event    Event            @relation(fields: [eventId], references: [id])
 
   @@unique([userId, eventId])
+
+  // Indexes
+  @@index([userId])
+  @@index([eventId])
+
 }
 
 // Enum for user role

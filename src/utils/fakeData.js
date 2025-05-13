@@ -13,6 +13,16 @@ const statuses = ["CONFIRMED", "CANCELLED"];
 
 const generateFakeData = async () => {
 	try {
+		const createdCategories = await Promise.all(
+			categories.map(async (name) => {
+				return prisma.category.upsert({
+					where: { name },
+					update: {},
+					create: { name },
+				});
+			}),
+		);
+
 		const users = [];
 		for (let i = 0; i < NUM_USERS; i++) {
 			const hashedPassword = await bcrypt.hash("password123", 10);
@@ -34,19 +44,24 @@ const generateFakeData = async () => {
 				data: {
 					title: faker.lorem.words(3),
 					description: faker.lorem.paragraph(),
-					category: faker.helpers.arrayElement(categories),
+					category: {
+						connect: { id: faker.helpers.arrayElement(createdCategories).id },
+					},
 					date: faker.date.future(),
-					venue: faker.location.city(),
+					address: faker.location.streetAddress(),
+					location: faker.location.city(),
+					venue: faker.company.name(),
 					price: parseFloat(faker.commerce.price({ min: 0, max: 200 })),
 					imageUrl: faker.image.url(),
-					createdById: faker.helpers.arrayElement(users).id,
+					createdBy: {
+						connect: { id: faker.helpers.arrayElement(users).id },
+					},
 					createdAt: faker.date.past(),
 				},
 			});
 			events.push(event);
 		}
 
-		// Create unique bookings (each user can book an event only once)
 		const usedPairs = new Set();
 		let createdBookings = 0;
 

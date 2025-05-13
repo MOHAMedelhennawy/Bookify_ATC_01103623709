@@ -85,3 +85,18 @@ export const loginUser = (email, password) => {
 		return user;
 	});
 };
+
+export const findUser = (id) => {
+	return handlePrismaQuery(async () => {
+		if (!id) {
+			throw new AppError(
+				"Event id is missing!",
+				400,
+				"Please provide a valid user ID in the request.",
+				true,
+			);
+		}
+
+		return await prisma.user.findUnique({ where: { id } });
+	});
+};

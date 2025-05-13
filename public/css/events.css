@@ -11,7 +11,7 @@
 	width: 24rem;
 	background: #fff;
 	border-radius: 12px;
-	background-color: #1F2937;
+	background-color: #1f2937;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	display: flex;
@@ -53,21 +53,23 @@
 }
 
 .event-details p {
-	font-size: .9rem;
-	color: #9CA3AF;
+	font-size: 0.9rem;
+	color: #9ca3af;
 }
 
 .event-details .event-location {
-    margin-top: -0.8rem;
+	margin-top: -0.8rem;
 }
 
-.event-time, .event-location {
+.event-time,
+.event-location {
 	display: flex;
 	gap: 8px;
 }
 
-.event-time span, .event-location span{
-	color: #60A5FA;
+.event-time span,
+.event-location span {
+	color: #60a5fa;
 	font-size: 1.2rem;
 	padding-top: 5px;
 }
@@ -77,7 +79,7 @@
 	font-weight: 600;
 	display: inline-block;
 	margin-top: 0.5rem;
-    margin-left: .4rem;
+	margin-left: 0.4rem;
 	padding: 0.3rem 0.7rem;
 	font-size: 0.8rem;
 	border-radius: 8px;
@@ -105,10 +107,10 @@
 }
 
 .book-btn {
-	background-color: #3B82F6;
+	background-color: #3b82f6;
 	color: #fff;
 }
 
 .book-btn:hover {
-	background-color: #2563EB;
+	background-color: #2563eb;
 }
