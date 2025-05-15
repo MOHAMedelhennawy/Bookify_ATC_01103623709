@@ -70,47 +70,17 @@ export const addNewEventServices = (data) => {
 			);
 		}
 
-		// Get user
-		if (!data.user || !data.user.id) {
-			throw new AppError(
-				"Missing user id",
-				400,
-				"The request is missing user id",
-				true,
-			);
-		}
-
-		const user = await prisma.user.findUnique({ where: { id: data.user.id } });
-
-		if (!user) {
-			throw new AppError(
-				`No user found with ID: ${data.user.id}`,
-				400,
-				"Make sure that user ID is correct",
-				true,
-			);
-		}
-
-		// Check admin privilege
-		if (user.role !== "ADMIN") {
-			throw new AppError(
-				"Unauthorized",
-				403,
-				"Only admins can create events",
-				true,
-			);
-		}
-
-		const newEvent = await prisma.Event.create({
+		const newEvent = await prisma.event.create({
 			data: {
 				title: data.title,
 				description: data.description,
-				category: data.category,
+				categoryId: data.categoryId,
 				date: data.date,
 				venue: data.venue,
 				price: data.price,
 				imageUrl: data.imageUrl,
-				createdById: data.user.id,
+				address: data.address,
+				location: data.location,
 			},
 		});
 
@@ -175,14 +145,13 @@ export const deleteEventByIdServices = (id) => {
 			throw new AppError(
 				`No event found with ID: ${id}`,
 				404,
-				"The event you're trying to update does not exist.",
+				"The event you're trying to delete does not exist.",
 				true,
 			);
 		}
 
 		const deletedEvent = await prisma.Event.delete({
 			where: { id },
-			include: { Bookings: true },
 		});
 
 		return deletedEvent;

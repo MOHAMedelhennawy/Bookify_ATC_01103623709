@@ -1,0 +1,209 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0d1117;
+  color: #fff;
+}
+
+.admin-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  margin-top: 10rem;
+  background-color: #161b22;
+  border-radius: 10px;
+}
+
+.event-image {
+    width: 4rem;
+    height:4rem;
+    border-radius: 4px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-header h1 {
+  margin: 0;
+}
+
+.admin-header .addEventBtn {
+  display: flex;
+  align-items: center;
+  background-color: #2d7dff;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.admin-header .addEventBtn:hover {
+  transition: .5s;
+  background-color: #2563eb;
+}
+
+.admin-header .addEventBtn * {
+  cursor: pointer;
+}
+
+.admin-header .addEventBtn button {
+  border: none;
+  color: white;
+  background-color: transparent;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #30363d;
+}
+
+th {
+  background-color: #21262d;
+}
+
+tr:hover {
+  transition: .9s;
+  background-color: #374151;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.3rem;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.actions .edit {
+  color: #58a6ff;
+}
+
+.actions .edit:hover {
+  scale: 1.13;
+  transition: .5s;
+}
+
+.actions .delete {
+  color: #f85149;
+}
+
+.actions .delete:hover {
+  scale: 1.13;
+  transition: .5s;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #161b22;
+  padding: 20px;
+  margin: 10% auto;
+  width: 46rem;
+  border-radius: 10px;
+}
+
+.modal-content input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #0d1117;
+  color: #ddd;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+}
+
+.modal-content #event-image::file-selector-button {
+  border: none;
+  cursor: pointer;
+  color: white;
+  width: 8rem;
+  height: 2rem;
+  border-radius: 6px;
+  background-color: #2563eb;
+}
+
+.modal-content #event-image::file-selector-button:hover {
+  transition: .5s;
+  background-color: #1658e6;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#saveBtn {
+  background-color: #2d7dff;
+  color: white;
+}
+
+#cancelBtn {
+  background-color: #444c56;
+  color: white;
+}
+
+#eventForm .date,
+#eventForm .location {
+  display: flex;
+  gap: 10px;
+}
+
+#evnetForm .event-name {
+  color: #ddd;
+}
+#eventForm .category-select {
+  width: 100%;
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  color: #7e7c7c;
+  font-size: .8rem;
+}
+
+#eventForm .category-select option:hover,
+#eventForm .category-select option:focus {
+  color: white;
+}
+
+/* End model */
+.admin-container .pagination {
+    margin: auto;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}

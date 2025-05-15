@@ -56,34 +56,12 @@ export const loginSchema = {
 		email: {
 			type: "string",
 			format: "email",
-			minLength: 10,
-			maxLength: 100,
-			errorMessage: {
-				format: "Email must be a valid email address.",
-				minLength: "Email must be at least 10 characters long.",
-				maxLength: "Email must not exceed 100 characters.",
-				type: "Email must be a string.",
-			},
 		},
 		password: {
 			type: "string",
-			minLength: 10,
-			maxLength: 50,
-			errorMessage: {
-				minLength: "Password must be at least 10 characters long.",
-				maxLength: "Password must not exceed 50 characters.",
-				type: "Password must be a string.",
-			},
 		},
 	},
 
 	required: ["email", "password"],
 	additionalProperties: false,
-	errorMessage: {
-		required: {
-			email: "Email is required.",
-			password: "Password is required.",
-		},
-		additionalProperties: "Extra fields are not allowed.",
-	},
 };

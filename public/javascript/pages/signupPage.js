@@ -1,4 +1,4 @@
-import { createNewUser } from "../api/signup.js";
+import { createNewUser } from "../api/auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector("form");
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		const password = document.querySelector(".password-field").value;
 
 		const data = await createNewUser({ name, email, password });
+
 		if (data.error) {
 			const errorMessages =
 				typeof data.message === "object" ? data.message.errors : null;

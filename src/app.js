@@ -1,4 +1,5 @@
 import path from "path";
+// import multer from "multer";
 import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
@@ -11,6 +12,7 @@ import logger from "./utils/logger.js";
 import eventRoutes from "./routes/eventRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import AppError from "./utils/AppError.js";
 import { checkCurrentUser } from "./middlewares/authMW.js";
@@ -21,6 +23,8 @@ const morganFormat = ":method :url :status :response-time ms";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.set("views", path.join(__dirname, "../views"));
+
+// export const upload = multer({ dest: "../public/images/events" });
 
 // Global Middlewares
 app.use(cors());
@@ -75,10 +79,13 @@ app.get(/(.*)/, checkCurrentUser);
 app.use("/", authRouter);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/categories", categoryRoutes);
 app.get("/", (req, res) => {
 	res.render("home");
 });
-
+app.get("/admin", (req, res) => {
+	res.render("admin");
+});
 // 404 Handler
 app.all(/(.*)/, (req, res, next) => {
 	next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));

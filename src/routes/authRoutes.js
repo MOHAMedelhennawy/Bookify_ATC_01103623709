@@ -16,7 +16,7 @@ router.get("/login", (req, res) => {
 	res.render("login");
 });
 
-router.post("/login", validateSchema(loginSchema), loginPost);
+router.post("/api/login", validateSchema(loginSchema), loginPost);
 
 router.get("/signup", (req, res) => {
 	res.render("signup");

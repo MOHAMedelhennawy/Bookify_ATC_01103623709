@@ -11,7 +11,8 @@ import {
 	eventSchemaPut,
 } from "../middlewares/schemas/event.schema.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
-import { authRequire } from "../middlewares/authMW.js";
+import { authRequire, checkCurrentUser } from "../middlewares/authMW.js";
+// import { upload } from "../app.js";
 
 const router = express.Router();
 
@@ -20,16 +21,11 @@ router.get("/", getAllEventsController);
 router.get("/:id", getEventByIdController);
 router.post(
 	"/",
-	authRequire,
 	validateSchema(eventSchemaPost),
+	// upload.single("file"),
 	addNewEventController,
 );
-router.put(
-	"/:id",
-	authRequire,
-	validateSchema(eventSchemaPut),
-	updateEventByIdController,
-);
-router.delete("/:id", authRequire, deleteEventByIdController);
+router.put("/:id", validateSchema(eventSchemaPut), updateEventByIdController);
+router.delete("/:id", deleteEventByIdController);
 
 export default router;

@@ -4,14 +4,14 @@ import {
 	addNewBookingController,
 	deleteBookingController,
 } from "../controller/bookginController.js";
-import { authRequire } from "../middlewares/authMW.js";
+import { authRequire, checkCurrentUser } from "../middlewares/authMW.js";
 
 const router = express.Router();
 
 // Routes
-router.get("/:userId", getAllUserBookingController);
+router.get("/", checkCurrentUser, getAllUserBookingController);
 // router.get("/:id", );
-router.post("/", authRequire, addNewBookingController);
+router.post("/", checkCurrentUser, addNewBookingController);
 router.delete("/", authRequire, deleteBookingController);
 
 export default router;

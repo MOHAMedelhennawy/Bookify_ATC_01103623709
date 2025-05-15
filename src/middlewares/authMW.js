@@ -30,7 +30,7 @@ export const checkCurrentUser = async (req, res, next) => {
 	try {
 		const decoded = await verifyToken(token);
 		const user = await findUser(decoded.id);
-		res.locals.user = user;
+		res.locals.user = user || null;
 	} catch (err) {
 		logger.error("Auth check failed:", err.message);
 		res.locals.user = null;

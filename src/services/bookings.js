@@ -5,6 +5,19 @@ import logger from "../utils/logger.js";
 
 const prisma = new PrismaClient();
 
+export const checkExistBooking = (userId, eventId) => {
+	return handlePrismaQuery(async () => {
+		return await prisma.booking.findUnique({
+			where: {
+				userId_eventId: {
+					userId,
+					eventId,
+				},
+			},
+		});
+	});
+};
+
 export const getAllUserBookingServices = (userId) => {
 	return handlePrismaQuery(async () => {
 		if (!userId) {

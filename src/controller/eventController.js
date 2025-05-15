@@ -37,8 +37,10 @@ export const getEventByIdController = catchAsync(async (req, res) => {
 });
 
 export const addNewEventController = catchAsync(async (req, res) => {
+	// Create new event
 	const newEvent = await addNewEventServices(req.body);
 
+	// Send response
 	res.status(201).json({
 		message: "Event created successfully",
 		newEvent,

@@ -25,7 +25,6 @@ export function validateSchema(schema) {
 
 	return (req, res, next) => {
 		const valid = validate(req.body);
-
 		if (!valid) {
 			logger.error("Validation error");
 			return res.status(400).json({

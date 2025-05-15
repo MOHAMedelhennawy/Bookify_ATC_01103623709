@@ -114,3 +114,7 @@
 .book-btn:hover {
 	background-color: #2563eb;
 }
+
+.book-btn.booked {
+	background-color: #2a773d;
+}
