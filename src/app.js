@@ -1,5 +1,4 @@
 import path from "path";
-// import multer from "multer";
 import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
@@ -23,8 +22,6 @@ const morganFormat = ":method :url :status :response-time ms";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.set("views", path.join(__dirname, "../views"));
-
-// export const upload = multer({ dest: "../public/images/events" });
 
 // Global Middlewares
 app.use(cors());

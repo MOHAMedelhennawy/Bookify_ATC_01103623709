@@ -11,6 +11,40 @@ export const eventSchemaPost = {
 				maxLength: "Title must not exceed 50 characters.",
 			},
 		},
+		date: {
+			type: "string",
+			errorMessage: {
+				type: "Date must be a string.",
+			},
+		},
+		address: {
+			type: "string",
+			minLength: 2,
+			maxLength: 50,
+			errorMessage: {
+				type: "Address must be a string.",
+				minLength: "Address must be at least 2 characters.",
+				maxLength: "Address must not exceed 50 characters.",
+			},
+		},
+		location: {
+			type: "string",
+			minLength: 2,
+			maxLength: 50,
+			errorMessage: {
+				type: "Location must be a string.",
+				minLength: "Location must be at least 2 characters.",
+				maxLength: "Location must not exceed 50 characters.",
+			},
+		},
+		categoryId: {
+			type: "string",
+			format: "uuid",
+			errorMessage: {
+				type: "Category ID must be a string.",
+				format: "Category is required",
+			},
+		},
 		description: {
 			type: "string",
 			minLength: 10,
@@ -19,18 +53,6 @@ export const eventSchemaPost = {
 				type: "Description must be a string.",
 				minLength: "Description must be at least 10 characters.",
 				maxLength: "Description must not exceed 2000 characters.",
-			},
-		},
-		date: {
-			type: "string",
-			errorMessage: {
-				type: "Date must be a string.",
-			},
-		},
-		categoryId: {
-			type: "string",
-			errorMessage: {
-				type: "Category ID must be a string.",
 			},
 		},
 		venue: {
@@ -45,49 +67,32 @@ export const eventSchemaPost = {
 		},
 		price: {
 			type: "number",
-			priceIsFloat: true,
 			errorMessage: {
 				type: "Price must be a number.",
-			},
-		},
-		imageUrl: {
-			type: "string",
-			errorMessage: {
-				type: "Image URL must be a string.",
-			},
-		},
-		address: {
-			type: "string",
-			errorMessage: {
-				type: "Address must be a string.",
-			},
-		},
-		location: {
-			type: "string",
-			errorMessage: {
-				type: "Location must be a string.",
 			},
 		},
 	},
 	required: [
 		"title",
-		"description",
-		"categoryId",
 		"date",
+		"address",
+		"location",
+		"categoryId",
+		"description",
 		"venue",
 		"price",
-		"imageUrl",
 	],
 	additionalProperties: false,
 	errorMessage: {
 		required: {
 			title: "Title is required.",
-			description: "Description is required.",
-			categoryId: "Category ID is required.",
 			date: "Date is required.",
+			address: "Address is required",
+			location: "Location is required",
+			categoryId: "Category is required.",
+			description: "Description is required.",
 			venue: "Venue is required.",
 			price: "Price is required.",
-			imageUrl: "Image URL is required.",
 		},
 		additionalProperties:
 			"You have included an extra field that is not allowed.",

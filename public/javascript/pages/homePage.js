@@ -39,8 +39,12 @@ const renderAllEvents = async (events) => {
 	eventsContainer.innerHTML = "";
 
 	// To prevent getting data again each time if it already exists
+	let bookedEventIds = null;
 	const userBookings = await getUserBookingsCached();
-	const bookedEventIds = new Set(userBookings.bookings.map((b) => b.eventId));
+
+	if (!userBookings?.error) {
+		bookedEventIds = new Set(userBookings.bookings.map((b) => b.eventId));
+	}
 	const fragment = document.createDocumentFragment();
 
 	events.forEach((event) => {
@@ -51,7 +55,7 @@ const renderAllEvents = async (events) => {
 		eventCard.innerHTML = eventCardHTML(event);
 
 		const bookingBtn = eventCard.querySelector(".book-btn");
-		if (bookedEventIds.has(event.id)) {
+		if (bookedEventIds && bookedEventIds?.has(event.id)) {
 			bookingBtn.classList.add("booked");
 		}
 
@@ -82,7 +86,7 @@ const fetchEvents = async (page = 1) => {
 };
 
 const eventCardHTML = (event) => {
-	const { category, price, title, address, location } = event;
+	const { category, price, title, address, location, imageUrl } = event;
 	const date = formatCustomDate(event.date);
 
 	// Escape dynamic content to prevent injection
@@ -92,7 +96,7 @@ const eventCardHTML = (event) => {
 
 	return `
         <div class="event-image">
-            <img src="/images/events/al-elmes-ULHxWq8reao-unsplash.jpg" alt="">
+            <img src="/images/events/${escape(imageUrl)}" alt="">
             <span class="event-price">$${escape(price)}</span>
         </div>
         <div class="event-details">

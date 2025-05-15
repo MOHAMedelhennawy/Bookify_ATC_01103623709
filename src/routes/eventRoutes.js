@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../config/multer.js";
 import {
 	getAllEventsController,
 	getEventByIdController,
@@ -11,8 +12,7 @@ import {
 	eventSchemaPut,
 } from "../middlewares/schemas/event.schema.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
-import { authRequire, checkCurrentUser } from "../middlewares/authMW.js";
-// import { upload } from "../app.js";
+import { prepareBodyTypesMiddleware } from "../middlewares/prepareBodyTypesMiddleware.js";
 
 const router = express.Router();
 
@@ -21,8 +21,9 @@ router.get("/", getAllEventsController);
 router.get("/:id", getEventByIdController);
 router.post(
 	"/",
+	upload.single("eventImg"),
+	prepareBodyTypesMiddleware,
 	validateSchema(eventSchemaPost),
-	// upload.single("file"),
 	addNewEventController,
 );
 router.put("/:id", validateSchema(eventSchemaPut), updateEventByIdController);

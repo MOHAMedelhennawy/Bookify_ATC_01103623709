@@ -77,7 +77,7 @@ export const addNewEventServices = (data) => {
 				categoryId: data.categoryId,
 				date: data.date,
 				venue: data.venue,
-				price: data.price,
+				price: parseFloat(data.price),
 				imageUrl: data.imageUrl,
 				address: data.address,
 				location: data.location,

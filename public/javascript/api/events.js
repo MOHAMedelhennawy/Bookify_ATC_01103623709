@@ -14,10 +14,17 @@ export const fetchEventByID = fetchErrorHandler(async (id) => {
 });
 
 export const createEvent = fetchErrorHandler(async (data) => {
-	return await apiClient(EVENTS_URL, {
+	const res = await fetch(EVENTS_URL, {
 		method: "POST",
-		body: JSON.stringify(data),
+		body: data,
 	});
+
+	if (!res.ok) {
+		const errorText = await res.text();
+		throw new Error(errorText || "Unknown error");
+	}
+
+	return await res.json();
 });
 
 export const updatedEventById = fetchErrorHandler(async (id, data) => {

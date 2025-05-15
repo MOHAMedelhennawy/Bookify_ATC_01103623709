@@ -1,11 +1,14 @@
-import { createEvent, deleteEventById, fetchAllEvents } from "../api/events.js";
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-undef */
+import { createEvent, deleteEventById, fetchAllEvents, fetchEventByID, updatedEventById } from "../api/events.js";
 import { renderCategoriesSelect } from "../main.js";
-import { formatCustomDate } from "../utils/date.js";
+import { formatCustomDate, formatDateTime } from "../utils/date.js";
 import { convertDate } from "../utils/date.js";
 import { renderPagination } from "../utils/pagination.js";
 import { showToast } from "../utils/showToast.js";
 
 const limit = 12;
+let originalEventData = {};
 const eventTableBody = document.querySelector("#eventTableBody");
 const paginationContainer = document.querySelector(".pagination");
 const modal = document.querySelector("#eventModal");
@@ -40,11 +43,11 @@ const renderAllEvents = (events) => {
 };
 
 const eventTabelTempleteHTML = (event) => {
-	const { title, venue, price } = event;
+	const { title, venue, price, imageUrl } = event;
 	const date = formatCustomDate(event.date);
 
 	return `
-        <td><img class="event-image" src="/images/events/al-elmes-ULHxWq8reao-unsplash.jpg"></td>
+        <td><img class="event-image" src="/images/events/${imageUrl}"></td>
         <td>${title}</td>
         <td>${date}</td>
         <td>${venue}</td>
@@ -81,46 +84,151 @@ const addEventsButtonsAction = (eventRow) => {
 	});
 };
 
+// Add event
 const addNewEvent = async (e) => {
 	e.preventDefault();
 
-	const title = form.querySelector("#event-name").value;
-	const date = form.querySelector("#event-date").value;
-	const time = form.querySelector("#event-time").value;
-	const description = form.querySelector("#event-description").value;
-	const venue = form.querySelector("#event-venue").value;
-	const address = form.querySelector("#event-address").value;
-	const location = form.querySelector("#event-location").value;
-	const imageUrl = form.querySelector("#event-image").value;
-	let price = form.querySelector("#event-price").value;
+	try {
 
-	const categorySelect = form.querySelector(".category-select");
-	const categoryId = categorySelect.selectedOptions[0]?.dataset.id;
+		const formData = new FormData();
+	
+		formData.append("title", form.querySelector("#event-name").value);
+		formData.append("date", convertDate(form.querySelector("#event-date").value, form.querySelector("#event-time").value));
+		formData.append("venue", form.querySelector("#event-venue").value);
+		formData.append("categoryId", form.querySelector(".category-select").selectedOptions[0]?.dataset.id);
+		formData.append("description", form.querySelector("#event-description").value);
+		formData.append("price", parseFloat(form.querySelector("#event-price").value));
+		formData.append("address", form.querySelector("#event-address").value);
+		formData.append("location", form.querySelector("#event-location").value);
+	
+		const fileInput = form.querySelector("#event-image");
+		if (fileInput.files.length > 0) {
+			formData.append("eventImg", fileInput.files[0]);
+		}
+	
+		const data = await createEvent(formData);
 
-	const convertedDateFormat = convertDate(date, time);
+		if (data?.error) {
+			let firstErrorMessage = "Something went worng";
 
-	if (date && Number(price)) {
-		price = parseFloat(price);
+			if(Array.isArray(data?.message?.errors) && data?.message?.errors.length > 0) {
+				firstErrorMessage = data.message.errors[0].message;
+			} else if (data?.message?.message) {
+				firstErrorMessage = data.message.message
+			} else if (typeof data?.message === "string") {
+				firstErrorMessage = data.message
+			}
+
+			showToast("error", `${firstErrorMessage}`);
+		} else {
+			showToast("success", "Event created successfully");
+			form.reset();
+			closeModal();
+		}
+	} catch (err) {
+		console.error("Unexpected Error:", err);
+		showToast("error", err.message || "Unexpected error occurred");
+	}
+};
+
+const addEventBtnAction = (e) => {
+	openModal();
+	form.addEventListener("submit", (e) => addNewEvent(e));
+}
+
+// Edit event
+
+const editEventBtnAction = async (e) => {
+	const editBtn = e.target.closest(".actions .edit");
+	if (!editBtn) return;
+
+	openModal(true);
+
+	const eventId = editBtn.closest("tr").dataset.id;
+	const event = await fetchEventByID(eventId);
+
+	if (!event) {
+		showToast("error", "Failed to fetch event, Please try again later");
+		closeModal();
+		return;
 	}
 
-	const data = await createEvent({
-		title,
-		date: convertedDateFormat,
-		venue,
-		categoryId,
-		description,
-		price,
-		imageUrl,
-		address,
-		location,
-	});
+	const eventDateAndTime = formatDateTime(event.event.date);
 
-	console.log(data);
-	if (data?.error) {
-		const firstErrorMessage = data.message.errors[0].message;
-		showToast("error", `${firstErrorMessage}`);
-	} else {
-		showToast("success", "Event created successfully");
+	const getCategoryName = (categoryId) => {
+		const select = document.querySelector(".category-select");
+		return Array.from(select.options).find(
+			(option) => option.dataset.id === categoryId
+		);
+	};
+
+	// Fill form and store original values
+	originalEventData = {
+		title: form.querySelector("#event-name").value = event.event.title,
+		venue: form.querySelector("#event-venue").value = event.event.venue,
+		description: form.querySelector("#event-description").value = event.event.description,
+		price: form.querySelector("#event-price").value = event.event.price.toString(),
+		date: form.querySelector("#event-date").value = eventDateAndTime.date,
+		time: form.querySelector("#event-time").value = eventDateAndTime.time,
+		address: form.querySelector("#event-address").value = event.event.address,
+		location: form.querySelector("#event-location").value = event.event.location,
+		category: form.querySelector(".category-select").value = getCategoryName(event.event.categoryId)?.value || ""
+	};
+
+	form.onsubmit = (e) => updateEvent(e, eventId);
+};
+
+const updateEvent = async (e, eventId) => {
+	e.preventDefault();
+
+	const updatedFields = {};
+
+	const currentValues = {
+		title: form.querySelector("#event-name").value,
+		venue: form.querySelector("#event-venue").value,
+		description: form.querySelector("#event-description").value,
+		price: form.querySelector("#event-price").value,
+		date: form.querySelector("#event-date").value,
+		time: form.querySelector("#event-time").value,
+		address: form.querySelector("#event-address").value,
+		location: form.querySelector("#event-location").value,
+		category: form.querySelector(".category-select").value,
+	};
+
+	for (const key in currentValues) {
+		if (currentValues[key] !== originalEventData[key]) {
+			updatedFields[key] = currentValues[key];
+		}
+	}
+
+	if (Object.keys(updatedFields).length === 0) {
+		showToast("error", "No changes made.");
+		return;
+	}
+
+	try {
+		const data = await updatedEventById(eventId, updatedFields);
+
+		if (data?.error) {
+			let firstErrorMessage = "Something went wrong";
+
+			if (Array.isArray(data?.message?.errors) && data?.message?.errors.length > 0) {
+				firstErrorMessage = data.message.errors[0].message;
+			} else if (data?.message?.message) {
+				firstErrorMessage = data.message.message;
+			} else if (typeof data?.message === "string") {
+				firstErrorMessage = data.message;
+			}
+
+			showToast("error", `${firstErrorMessage}`);
+		} else {
+			showToast("success", "Event updated successfully.");
+			form.reset();
+			closeModal();
+		}
+	} catch (err) {
+		console.error("Update Error:", err);
+		showToast("error", "Unexpected error occurred while updating.");
 	}
 };
 
@@ -134,9 +242,9 @@ function closeModal() {
 	form.reset();
 }
 
-addEventBtn.addEventListener("click", () => openModal());
+eventTableBody.addEventListener("click", (e) => editEventBtnAction(e));
+addEventBtn.addEventListener("click", (e) => addEventBtnAction(e));
 cancelBtn.addEventListener("click", closeModal);
-form.addEventListener("submit", (e) => addNewEvent(e));
 document.addEventListener("DOMContentLoaded", () => {
 	renderCategoriesSelect();
 	fetchEvents();

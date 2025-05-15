@@ -11,6 +11,16 @@ import logger from "../utils/logger.js";
 
 export const getAllUserBookingController = catchAsync(async (req, res) => {
 	const user = res.locals.user;
+
+	if (!user || !user.id) {
+		throw new AppError(
+			"User ID is missing",
+			400,
+			"Please provide a valid user ID in the request.",
+			true,
+		);
+	}
+
 	const bookings = await getAllUserBookingServices(user.id);
 
 	res.status(200).json({
@@ -29,7 +39,7 @@ export const addNewBookingController = catchAsync(async (req, res) => {
 		throw new AppError(
 			"User ID is missing",
 			400,
-			"Please provide a valid user ID in the request.",
+			"You need to be logged in to perform this action. Please log in and try again",
 			true,
 		);
 	}
