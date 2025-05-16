@@ -1,4 +1,4 @@
-import logger from "../utils/logger.js";
+import logger from "../config/logger.js";
 import catchAsync from "../utils/catchAsync.js";
 import {
 	getAllEventsServices,
@@ -11,7 +11,7 @@ import { getQueryObject } from "../utils/getQuery.js";
 
 export const getAllEventsController = catchAsync(async (req, res) => {
 	// Pagination, filteration, sorting
-	const queryObject = getQueryObject(req);
+	const queryObject = await getQueryObject(req);
 	const { events, count } = await getAllEventsServices(queryObject);
 
 	res.status(200).json({

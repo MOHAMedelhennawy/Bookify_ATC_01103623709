@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import logger from "../utils/logger.js";
-import { findUser } from "../services/auth.js";
+import logger from "../config/logger.js";
+import { findUserById } from "../services/auth.js";
 import { verifyToken } from "../utils/jwt.js";
 
 export const authRequire = async (req, res, next) => {
@@ -29,7 +29,7 @@ export const checkCurrentUser = async (req, res, next) => {
 
 	try {
 		const decoded = await verifyToken(token);
-		const user = await findUser(decoded.id);
+		const user = await findUserById(decoded.id);
 		res.locals.user = user || null;
 	} catch (err) {
 		logger.error("Auth check failed:", err.message);

@@ -7,7 +7,7 @@ import {
 import AppError from "../utils/AppError.js";
 
 import catchAsync from "../utils/catchAsync.js";
-import logger from "../utils/logger.js";
+import logger from "../config/logger.js";
 
 export const getAllUserBookingController = catchAsync(async (req, res) => {
 	const user = res.locals.user;

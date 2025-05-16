@@ -1,13 +1,15 @@
-import { PrismaClient } from "@prisma/client";
-import { handlePrismaQuery } from "../utils/handlePrismaQuery.js";
+import { findUserById } from "./auth.js";
 import AppError from "../utils/AppError.js";
-import logger from "../utils/logger.js";
+import { PrismaClient } from "@prisma/client";
+import redisClient from "../config/redisClient.js";
+import { handlePrismaQuery } from "../utils/handlePrismaQuery.js";
 
 const prisma = new PrismaClient();
+const redisKey = (userId) => `user:${userId}:bookings`;
 
 export const checkExistBooking = (userId, eventId) => {
 	return handlePrismaQuery(async () => {
-		return await prisma.booking.findUnique({
+		const booking = await prisma.booking.findUnique({
 			where: {
 				userId_eventId: {
 					userId,
@@ -15,6 +17,8 @@ export const checkExistBooking = (userId, eventId) => {
 				},
 			},
 		});
+
+		return booking;
 	});
 };
 
@@ -29,19 +33,19 @@ export const getAllUserBookingServices = (userId) => {
 			);
 		}
 
-		const user = await prisma.User.findUnique({ where: { id: userId } });
-		logger.info("User exist");
+		const cachedBookings = await redisClient.get(redisKey(userId));
+		if (cachedBookings) return JSON.parse(cachedBookings);
 
-		if (!user) {
-			throw new AppError(
-				`No user found with ID: ${userId}`,
-				400,
-				"Make sure that user ID is correct",
-				true,
-			);
-		}
+		const bookings = await prisma.Booking.findMany({
+			where: { userId },
+			select: {
+				eventId: true,
+			},
+		});
 
-		const bookings = await prisma.Booking.findMany({ where: { userId } });
+		await redisClient.set(redisKey(userId), JSON.stringify(bookings), {
+			EX: 3600,
+		});
 
 		return bookings;
 	});
@@ -49,26 +53,16 @@ export const getAllUserBookingServices = (userId) => {
 
 export const addNewBookingServices = (userId, eventId) => {
 	return handlePrismaQuery(async () => {
-		if (!userId) {
+		if (!userId || !eventId) {
 			throw new AppError(
-				"Missing user id",
+				"Missing user or event id",
 				400,
-				"The request is missing user id",
+				"The request is missing necessary data",
 				true,
 			);
 		}
 
-		if (!eventId) {
-			throw new AppError(
-				"Missing event id",
-				400,
-				"The request is missing event id",
-				true,
-			);
-		}
-
-		const user = await prisma.User.findUnique({ where: { id: userId } });
-
+		const user = await findUserById(userId);
 		if (!user) {
 			throw new AppError(
 				`No user found with ID: ${userId}`,
@@ -79,7 +73,6 @@ export const addNewBookingServices = (userId, eventId) => {
 		}
 
 		const event = await prisma.Event.findUnique({ where: { id: eventId } });
-
 		if (!event) {
 			throw new AppError(
 				`No event found with ID: ${eventId}`,
@@ -96,32 +89,26 @@ export const addNewBookingServices = (userId, eventId) => {
 			},
 		});
 
+		await redisClient.del(redisKey(userId));
+
 		return newBooking;
 	});
 };
 
 export const deleteBookingService = (userId, eventId) => {
 	return handlePrismaQuery(async () => {
-		if (!userId) {
+		// check if user ID and event ID is passed
+		if (!userId || !eventId) {
 			throw new AppError(
-				"Missing user id",
+				"Missing user or event id",
 				400,
-				"The request is missing user id",
+				"The request is missing necessary data",
 				true,
 			);
 		}
 
-		if (!eventId) {
-			throw new AppError(
-				"Missing event id",
-				400,
-				"The request is missing event id",
-				true,
-			);
-		}
-
-		const user = await prisma.User.findUnique({ where: { id: userId } });
-
+		// Check if user exists
+		const user = await findUserById(userId);
 		if (!user) {
 			throw new AppError(
 				`No user found with ID: ${userId}`,
@@ -131,8 +118,8 @@ export const deleteBookingService = (userId, eventId) => {
 			);
 		}
 
+		// Check if event exists
 		const event = await prisma.Event.findUnique({ where: { id: eventId } });
-
 		if (!event) {
 			throw new AppError(
 				`No event found with ID: ${eventId}`,
@@ -142,6 +129,7 @@ export const deleteBookingService = (userId, eventId) => {
 			);
 		}
 
+		// Delete booking
 		const deletedBooking = await prisma.Booking.deleteMany({
 			where: {
 				userId,
@@ -157,6 +145,8 @@ export const deleteBookingService = (userId, eventId) => {
 				true,
 			);
 		}
+
+		await redisClient.del(redisKey(userId));
 
 		return true;
 	});

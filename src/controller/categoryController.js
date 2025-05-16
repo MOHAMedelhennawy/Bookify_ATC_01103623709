@@ -1,6 +1,6 @@
 import { getAllCategoriesService } from "../services/category.js";
 import catchAsync from "../utils/catchAsync.js";
-import logger from "../utils/logger.js";
+import logger from "../config/logger.js";
 
 export const getAllCategoriesController = catchAsync(async (req, res) => {
 	const categories = await getAllCategoriesService();

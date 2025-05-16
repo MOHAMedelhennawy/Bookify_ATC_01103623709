@@ -1,24 +1,24 @@
 import path from "path";
-import { fileURLToPath } from "url";
-import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import morgan from "morgan";
+import express from "express";
+import { fileURLToPath } from "url";
+import logger from "./config/logger.js";
 import cookieParser from "cookie-parser";
-import { rateLimit } from "express-rate-limit";
+import morganMW from "./config/morgan.js";
+import limiter from "./config/limiter.js";
+import AppError from "./utils/AppError.js";
 import { PrismaClient } from "@prisma/client";
-import logger from "./utils/logger.js";
-import eventRoutes from "./routes/eventRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
-import globalErrorHandler from "./middlewares/globalErrorHandler.js";
-import AppError from "./utils/AppError.js";
 import { checkCurrentUser } from "./middlewares/authMW.js";
+import globalErrorHandler from "./middlewares/globalErrorHandler.js";
+import "./config/passport.js";
 
 const app = express();
 const prisma = new PrismaClient();
-const morganFormat = ":method :url :status :response-time ms";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.set("views", path.join(__dirname, "../views"));
@@ -32,31 +32,10 @@ app.use(cookieParser());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-// Morgan Logging
-app.use(
-	morgan(morganFormat, {
-		stream: {
-			write: (message) => {
-				const logObject = {
-					method: message.split(" ")[0],
-					url: message.split(" ")[1],
-					status: message.split(" ")[2],
-					responseTime: message.split(" ")[3],
-				};
-				logger.info(JSON.stringify(logObject));
-				console.log(message.trim());
-			},
-		},
-	}),
-);
+// Morgan Logging Middleware
+app.use(morganMW);
 
-// Rate Limiter
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	limit: 100,
-	standardHeaders: "draft-8",
-	legacyHeaders: false,
-});
+// Rate Limiter Middleware
 // app.use(limiter);
 
 app.use((req, res, next) => {

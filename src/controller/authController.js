@@ -1,4 +1,5 @@
-import logger from "../utils/logger.js";
+import passport from "passport";
+import logger from "../config/logger.js";
 import catchAsync from "../utils/catchAsync.js";
 import { loginUser, signupUser } from "../services/auth.js";
 import { generateAuthToken } from "../utils/generateToken.js";
@@ -62,3 +63,26 @@ export const logoutGet = (req, res) => {
 	res.cookie("auth_token", "");
 	res.redirect("/");
 };
+
+// *************************
+// *                       *
+// *    GOOGLE OUTH 2.0    *
+// *                       *
+// *************************
+
+export const googleOAuthController = passport.authenticate("google", {
+	scope: ["profile", "email"], // Define what you need to retrive from the user profile. like profile info, emails or other info
+});
+
+export const googleOAthCallbackController = catchAsync((req, res) => {
+	/**
+	 * After the user sign-in or login, it's redirect to this endpoint that
+	 * you define in passport-config.js file. Then go ot passport callback function.
+	 * so you add this middleware 'passport.authenticate('google')'. this middleware
+	 */
+
+	const { token } = req.user;
+	const maxAge = 12 * 60 * 60;
+	res.cookie("auth_token", token, { httpOnly: true, maxAge: maxAge * 1000 });
+	res.redirect("/");
+});

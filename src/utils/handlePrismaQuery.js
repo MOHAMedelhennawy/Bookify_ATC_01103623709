@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import AppError from "./AppError.js";
-import logger from "./logger.js";
+import logger from "../config/logger.js";
 
 export const handlePrismaQuery = async (queryFn) => {
 	try {

@@ -1,12 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { handlePrismaQuery } from "../utils/handlePrismaQuery.js";
-import logger from "../utils/logger.js";
+import logger from "../config/logger.js";
 import AppError from "../utils/AppError.js";
 
 const prisma = new PrismaClient();
 
 export const getAllEventsServices = async (queryObject) => {
 	return await handlePrismaQuery(async () => {
+		console.log(queryObject);
 		const count = await prisma.event.count({
 			skip: queryObject.skip,
 			take: queryObject.take,

@@ -1,8 +1,11 @@
 import express from "express";
+import passport from "passport";
 import {
 	loginPost,
 	signupPost,
 	logoutGet,
+	googleOAuthController,
+	googleOAthCallbackController,
 } from "../controller/authController.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 import {
@@ -25,5 +28,14 @@ router.get("/signup", (req, res) => {
 router.post("/api/signup", validateSchema(signupSchema), signupPost);
 
 router.get("/logout", logoutGet);
+
+// Google OAuth
+router.get("/auth/google", googleOAuthController);
+
+router.get(
+	"/auth/google/callback",
+	passport.authenticate("google", { session: false }),
+	googleOAthCallbackController,
+);
 
 export default router;
