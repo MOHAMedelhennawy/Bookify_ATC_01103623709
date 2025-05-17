@@ -31,6 +31,17 @@ A full-featured event booking web application that allows users to browse, regis
 - **helmet, cors, express-rate-limit** – App security
 - **AJV + ajv-errors + ajv-formats** – JSON schema validation
 
+
+### Frontend
+- **Javascript**
+- **EJS**
+- **CSS**
+
+---
+
+## Prerequisites
+- Docker
+
 ---
 
 ## Installation and Setup
@@ -52,8 +63,8 @@ NODE_ENV=development
 # Database
 DB_HOST=db
 DB_PORT=5432
-DB_USER=root
-DB_PASSWORD=root
+DB_USER=postgres
+DB_PASSWORD=postgres
 DB_NAME=bookify
 DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
 
@@ -83,23 +94,14 @@ npm install
 docker-compose up --build
 ```
 
-5. Access the container:
-```bash
-docker exec -it ATC_01103623709-api-1 bash
-```
-
-6. Set up the database with Prisma:
-```bash
-npx prisma generate
-npx prisma migrate dev --name init
-```
-
-7. Seed the database with fake data:
-```bash
-npm run seed
-```
-
 ---
 
-## Prerequisites
-- Docker
+## 🔐 Admin Access
+
+To access the admin dashboard, use the following credentials to log in:
+
+- **Email:** admin@gmail.com
+- **Password:** AdminPassword123
+
+
+After logging in with these credentials, you'll have full administrative access to manage events and users.

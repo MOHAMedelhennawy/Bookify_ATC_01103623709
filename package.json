@@ -8,8 +8,9 @@
 		"lint": "eslint",
 		"lint:fix": "eslint --fix",
 		"start": "node src/server.js",
-		"start-dev": "nodemon src/server.js",
 		"prettier:fix": "npx prettier . --write",
+		"start-dev": "npm run db:init && nodemon src/server.js",
+		"db:init": "npx prisma generate && npx prisma migrate dev --name init && npm run seed",
 		"seed": "node fakeData.js"
 	},
 	"keywords": [],

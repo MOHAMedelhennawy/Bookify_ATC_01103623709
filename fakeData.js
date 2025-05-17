@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 const NUM_EVENTS = 500;
 const categories = ["Tech", "Music", "Health", "Education", "Sports"];
 
-
 const IMAGES_DIR = path.join(process.cwd(), "public", "images", "events");
 
 const getLocalImages = () => {
@@ -35,7 +34,15 @@ const generateFakeData = async () => {
 		const localImages = getLocalImages();
 		console.log(`📷 Found ${localImages.length} local images`);
 
-	
+		const user = await prisma.user.create({
+			data: {
+				name: "Admin",
+				email: "admin@gmail.com",
+				password: "AdminPassword123",
+				role: "ADMIN",
+			},
+		});
+
 		const createdCategories = await Promise.all(
 			categories.map(async (name) => {
 				return prisma.category.upsert({
@@ -46,7 +53,6 @@ const generateFakeData = async () => {
 			}),
 		);
 
-	
 		await prisma.event.deleteMany();
 
 		const events = [];
