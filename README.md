@@ -39,8 +39,8 @@ Follow these steps to set up and run the project locally:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/MOHAMedelhennawy/Bookify_ATC_01103623709.git
-cd Bookify_ATC_01103623709/
+git clone https://github.com/MOHAMedelhennawy/ATC_01103623709.git
+cd ATC_01103623709/
 ```
 
 2. Create an `.env` file with the following example:
@@ -85,7 +85,7 @@ docker-compose -f docker-compose.dev.yml up --build
 
 5. Access the container:
 ```bash
-docker exec -it bookify_atc_01103623709-api-1 bash
+docker exec -it ATC_01103623709-api-1 bash
 ```
 
 6. Set up the database with Prisma:
