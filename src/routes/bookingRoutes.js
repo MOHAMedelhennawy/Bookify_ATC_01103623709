@@ -11,7 +11,7 @@ const router = express.Router();
 // Routes
 router.get("/", checkCurrentUser, getAllUserBookingController);
 // router.get("/:id", );
-router.post("/", checkCurrentUser, addNewBookingController);
+router.post("/", authRequire, addNewBookingController);
 router.delete("/", authRequire, deleteBookingController);
 
 export default router;

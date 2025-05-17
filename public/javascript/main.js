@@ -1,4 +1,12 @@
+import { addNewBooking } from "./api/books.js";
 import { fetchAllCategories } from "./api/category.js";
+import { showToast } from "./utils/showToast.js";
+
+let limit = 12;
+let searchTerm = "";
+let selectedCategory = "";
+let sortBy = "";
+let sortOrder = "asc";
 
 export const renderCategoriesSelect = async () => {
 	const categorySelect = document.querySelector(".category-select");
@@ -15,3 +23,37 @@ export const renderCategoriesSelect = async () => {
 		categorySelect.appendChild(selectOptionElement);
 	});
 };
+
+export const addNewBookingBtnAction = async (bookingBtn, event) => {
+	if (!event || !event?.id) {
+		showToast("error", "Event id is required");
+		return;
+	}
+
+	const booking = await addNewBooking(event.id);
+
+	if (booking?.error) {
+		showToast("error", booking.message.description);
+		return;
+	} else {
+		bookingBtn.classList.add("booked");
+		showToast("success", "Event booked successfully");
+	}
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+	let lastScrollY = window.scrollY;
+	const navbar = document.querySelector(".navbar");
+
+	window.addEventListener("scroll", () => {
+		const currentScrollY = window.scrollY;
+
+		if (currentScrollY > lastScrollY && currentScrollY > 50) {
+			navbar.style.top = "-80px";
+		} else {
+			navbar.style.top = "0";
+		}
+
+		lastScrollY = currentScrollY;
+	});
+});

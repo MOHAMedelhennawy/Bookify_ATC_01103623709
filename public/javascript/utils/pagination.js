@@ -5,7 +5,6 @@ export function renderPagination(
 	onPageChange,
 	options = {},
 ) {
-	// Validate inputs
 	if (totalPages <= 0 || currentPage <= 0 || currentPage > totalPages) {
 		console.error("Invalid pagination parameters");
 		return;
@@ -20,23 +19,31 @@ export function renderPagination(
 		return;
 	}
 
-	// Clear existing content
 	pageNumbersContainer.innerHTML = "";
 
-	// Configuration with defaults
 	const { maxVisibleButtons = 5 } = options;
 
-	// Calculate button range
-	let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-	let endPage = startPage + maxVisibleButtons - 1;
+	let half = Math.floor(maxVisibleButtons / 2);
+	let startPage = currentPage - half;
+	let endPage = currentPage + half;
 
-	// Adjust if endPage exceeds totalPages
+	// Adjust bounds
+	if (startPage < 1) {
+		endPage += 1 - startPage;
+		startPage = 1;
+	}
 	if (endPage > totalPages) {
+		startPage -= endPage - totalPages;
 		endPage = totalPages;
-		startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+	}
+	startPage = Math.max(startPage, 1);
+
+	// Ensure not more than maxVisibleButtons
+	let visiblePages = endPage - startPage + 1;
+	if (visiblePages > maxVisibleButtons) {
+		endPage = startPage + maxVisibleButtons - 1;
 	}
 
-	// Create page buttons
 	for (let i = startPage; i <= endPage; i++) {
 		const button = document.createElement("button");
 		button.className =
@@ -60,13 +67,12 @@ export function renderPagination(
 	prevBtn.setAttribute("aria-label", "Previous page");
 	nextBtn.setAttribute("aria-label", "Next page");
 
-	// Remove old listeners (to prevent duplicate calls)
-	prevBtn.replaceWith(prevBtn.cloneNode(true));
-	nextBtn.replaceWith(nextBtn.cloneNode(true));
+	// Replace buttons to remove old listeners
+	const newPrevBtn = prevBtn.cloneNode(true);
+	const newNextBtn = nextBtn.cloneNode(true);
 
-	// Re-select buttons
-	const newPrevBtn = container.querySelector(".prev-btn");
-	const newNextBtn = container.querySelector(".next-btn");
+	prevBtn.replaceWith(newPrevBtn);
+	nextBtn.replaceWith(newNextBtn);
 
 	newPrevBtn.addEventListener("click", () => {
 		if (currentPage > 1) onPageChange(currentPage - 1);

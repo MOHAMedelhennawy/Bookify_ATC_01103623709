@@ -13,7 +13,7 @@ import authRouter from "./routes/authRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
-import { checkCurrentUser } from "./middlewares/authMW.js";
+import { checkCurrentUser, checkUserPrivlages } from "./middlewares/authMW.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import "./config/passport.js";
 
@@ -51,17 +51,17 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.get(/(.*)/, checkCurrentUser);
+// app.get(/(.*)/, checkCurrentUser);
 app.use("/", authRouter);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/categories", categoryRoutes);
-app.get("/", (req, res) => {
-	res.render("home");
-});
-app.get("/admin", (req, res) => {
-	res.render("admin");
-});
+// eslint-disable-next-line prettier/prettier
+app.get("/", checkCurrentUser, (req, res) => { res.render("home") });
+// eslint-disable-next-line prettier/prettier
+app.get("/admin", checkCurrentUser, checkUserPrivlages, (req, res) => { res.render("admin") });
+app.get("/event/:id", checkCurrentUser, (req, res, next) => res.render("event"));
+
 // 404 Handler
 app.all(/(.*)/, (req, res, next) => {
 	next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));

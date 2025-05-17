@@ -184,3 +184,11 @@ export const findUserByEmail = (email) => {
 		return await prisma.user.findUnique({ where: { email: cleanEmail } });
 	});
 };
+
+export const removeUserFromCache = async (id) => {
+	try {
+		await redisClient.del(`user:${id}`);
+	} catch (error) {
+		throw new AppError("Unexpected error", 500, error.message, true);
+	}
+};

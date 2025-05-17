@@ -7,7 +7,11 @@ import { convertDate } from "../utils/date.js";
 import { renderPagination } from "../utils/pagination.js";
 import { showToast } from "../utils/showToast.js";
 
-const limit = 12;
+let limit = 12;
+let searchTerm = "";
+let selectedCategory = "";
+let sortBy = "";
+let sortOrder = "asc";
 let originalEventData = {};
 const eventTableBody = document.querySelector("#eventTableBody");
 const paginationContainer = document.querySelector(".pagination");
@@ -18,14 +22,28 @@ const form = document.querySelector("#eventForm");
 const formTitle = document.querySelector("#formTitle");
 
 const fetchEvents = async (page = 1) => {
-	// Get data
-	const data = await fetchAllEvents(page, limit);
+	const query = new URLSearchParams({
+		page,
+		limit,
+		search: searchTerm,
+		category: selectedCategory,
+		sortBy,
+		order: sortOrder,
+	});
 
-	// Render data
-	renderAllEvents(data.events);
+	const data = await fetchAllEvents(`?${query.toString()}`);
 
+	if (data?.error) {
+		showToast("error", "Failed to upload events");
+		return;
+	}
+
+	await renderAllEvents(data.events);
+	
+	const totalPages = Math.ceil(data.count / limit);
+	
 	// Render pagination
-	renderPagination(paginationContainer, data.count, page, fetchEvents);
+	renderPagination(paginationContainer, totalPages, page, fetchEvents);
 };
 
 const renderAllEvents = (events) => {

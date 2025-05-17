@@ -12,6 +12,7 @@ import {
 	loginSchema,
 	signupSchema,
 } from "../middlewares/schemas/auth.schema.js";
+import { checkCurrentUser } from "../middlewares/authMW.js";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.get("/signup", (req, res) => {
 
 router.post("/api/signup", validateSchema(signupSchema), signupPost);
 
-router.get("/logout", logoutGet);
+router.get("/logout", checkCurrentUser, logoutGet);
 
 // Google OAuth
 router.get("/auth/google", googleOAuthController);

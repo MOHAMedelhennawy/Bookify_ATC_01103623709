@@ -1,8 +1,13 @@
 import passport from "passport";
 import logger from "../config/logger.js";
 import catchAsync from "../utils/catchAsync.js";
-import { loginUser, signupUser } from "../services/auth.js";
+import {
+	loginUser,
+	removeUserFromCache,
+	signupUser,
+} from "../services/auth.js";
 import { generateAuthToken } from "../utils/generateToken.js";
+import AppError from "../utils/AppError.js";
 
 // export const signupGet = () => {
 //     render();
@@ -58,11 +63,23 @@ export const loginPost = catchAsync(async (req, res) => {
 	});
 });
 
-export const logoutGet = (req, res) => {
+export const logoutGet = catchAsync(async (req, res) => {
+	const user = res.locals.user;
+
+	if (!user || !user.id) {
+		throw new AppError(
+			"Bad Request",
+			400,
+			"Failed to logout, please try again later",
+			true,
+		);
+	}
+
+	await removeUserFromCache(user.id);
 	logger.info("Json token removed successfully");
-	res.cookie("auth_token", "");
+	res.clearCookie("auth_token");
 	res.redirect("/");
-};
+});
 
 // *************************
 // *                       *

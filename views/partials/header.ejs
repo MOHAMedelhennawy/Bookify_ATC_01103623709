@@ -10,13 +10,16 @@
         </div>
         <div class="nav-links">
             <a href="/">Home</a>
-            <a href="#">Events</a>
+            <a class="evnts-link" href="#">Events</a>
             <a href="#">About</a>
         </div>
     </div>
     <nav>
     <div class="buttons">
         <% if (user) { %>
+            <% if (user.role === "ADMIN") { %>
+                <a class="admin" href="/admin"><span class="material-symbols-outlined">shield_person</span></a>
+            <% } %>
             <a href="/logout"><button class="btn logout">Logout</button></a>
         <% } else { %>
             <a href="/login"><button class="btn login">Login</button></a>

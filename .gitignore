@@ -3,4 +3,3 @@ node_modules/
 app.log
 docker-data/
 generated/
-public/images

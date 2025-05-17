@@ -11,6 +11,7 @@ body {
 	width: 100%;
 	z-index: 1000;
 	background-color: white;
+	transition: top 0.3s ease;
 	padding: 0.9rem 5rem;
 	display: flex;
 	justify-content: space-between;
@@ -108,6 +109,16 @@ nav .register:hover {
 	background-color: rgb(86, 88, 211);
 	transition: 0.5s;
 }
+nav .admin {
+	font-size: 30px;
+	color: white;
+	display: flex;
+	justify-content: center;
+}
+
+nav .admin span{
+	font-size: 30px;
+}
 
 nav .logout {
 	width: 4rem;
@@ -123,10 +134,11 @@ nav .logout:hover {
 }
 
 .buttons {
+	width: 8rem;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
-
 
 .toast {
     position: fixed;
@@ -222,32 +234,4 @@ nav .logout:hover {
 .page-number:hover,
 .pagination-btn:not(:disabled):hover {
     background-color: #2563eb;
-}
-
-
-.category-select {
-	padding: 0.5rem;
-	border-radius: 8px;
-	border: none;
-    padding: 0.5rem;
-    font-size: 1rem;
-	height: 2.7rem;
-	background-color: #1f2937;
-	color: #9ca3af;
-	padding: 0.5rem 0.3rem;
-}
-
-.category-select:focus {
-	border: none;
-	outline: none;
-}
-
-select:hover,
-select:focus {
-  /* background: #ddd; */
-}
-
-.category-select option:hover,
-.category-select option:focus {
-  color: #2563eb;
 }

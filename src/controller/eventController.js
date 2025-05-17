@@ -37,8 +37,6 @@ export const getEventByIdController = catchAsync(async (req, res) => {
 });
 
 export const addNewEventController = catchAsync(async (req, res) => {
-	console.log(req.body);
-	console.log(typeof req.body);
 	if (!req.file) {
 		return res.status(400).json({ message: "Image file is required" });
 	}

@@ -7,10 +7,7 @@ const prisma = new PrismaClient();
 
 export const getAllEventsServices = async (queryObject) => {
 	return await handlePrismaQuery(async () => {
-		console.log(queryObject);
 		const count = await prisma.event.count({
-			skip: queryObject.skip,
-			take: queryObject.take,
 			where: queryObject.where,
 			orderBy: queryObject.orderBy,
 		});

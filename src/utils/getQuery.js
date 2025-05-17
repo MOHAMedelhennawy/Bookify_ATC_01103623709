@@ -53,7 +53,7 @@ const getCategoryMap = async () => {
 	let categoriesObject = {};
 	const categories = await getAllCategoriesService();
 
-	categories.map((category) => {
+	categories.forEach((category) => {
 		categoriesObject[category.name] = category.id;
 	});
 

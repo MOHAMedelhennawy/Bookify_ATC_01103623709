@@ -5,8 +5,8 @@ const PORT = 4000;
 const BASE_URL = `http://localhost:${PORT}/api`;
 const EVENTS_URL = `${BASE_URL}/events`;
 
-export const fetchAllEvents = fetchErrorHandler(async (page, limit) => {
-	return await apiClient(`${EVENTS_URL}?page=${page}&limit=${limit}`);
+export const fetchAllEvents = fetchErrorHandler(async (queryString) => {
+	return await apiClient(`${EVENTS_URL}${queryString}`);
 });
 
 export const fetchEventByID = fetchErrorHandler(async (id) => {

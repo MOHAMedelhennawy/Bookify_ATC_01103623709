@@ -3,6 +3,7 @@ import AppError from "../utils/AppError.js";
 import { PrismaClient } from "@prisma/client";
 import redisClient from "../config/redisClient.js";
 import { handlePrismaQuery } from "../utils/handlePrismaQuery.js";
+import { sendBookingConfirmation } from "../config/nodemailer.js";
 
 const prisma = new PrismaClient();
 const redisKey = (userId) => `user:${userId}:bookings`;
@@ -90,6 +91,8 @@ export const addNewBookingServices = (userId, eventId) => {
 		});
 
 		await redisClient.del(redisKey(userId));
+
+		await sendBookingConfirmation(userId, eventId);
 
 		return newBooking;
 	});

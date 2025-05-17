@@ -19,6 +19,11 @@
 	border: #374151 1px solid;
 }
 
+.event-card:hover {
+	transition: .5s ease;
+	transform: translateY(-5px);
+}
+
 .event-image {
 	position: relative;
 }
@@ -27,6 +32,11 @@
 	width: 100%;
 	height: 230px;
 	object-fit: cover;
+}
+
+.event-image img:hover {
+	transition: .5s;
+	transform: scale(1.05);
 }
 
 .event-price {
