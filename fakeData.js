@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
 import { readdirSync } from "fs";
 import path from "path";
+import hashPassword from "./src/utils/hashPassword.js";
 
 const prisma = new PrismaClient();
 
@@ -29,19 +30,30 @@ const getLocalImages = () => {
 	}
 };
 
+async function createAdminIfNotExists() {
+	const existing = await prisma.user.findUnique({
+		where: { email: "admin@gmail.com" },
+	});
+	if (!existing) {
+		const hashedPassword = await hashPassword("AdminPassword123");
+		await prisma.user.create({
+			data: {
+				name: "Admin",
+				email: "admin@gmail.com",
+				password: hashedPassword,
+				role: "ADMIN",
+			},
+		});
+		console.log("Admin user created");
+	} else {
+		console.log("Admin user already exists");
+	}
+};
+
 const generateFakeData = async () => {
 	try {
 		const localImages = getLocalImages();
 		console.log(`📷 Found ${localImages.length} local images`);
-
-		const user = await prisma.user.create({
-			data: {
-				name: "Admin",
-				email: "admin@gmail.com",
-				password: "AdminPassword123",
-				role: "ADMIN",
-			},
-		});
 
 		const createdCategories = await Promise.all(
 			categories.map(async (name) => {
@@ -89,3 +101,4 @@ const generateFakeData = async () => {
 };
 
 generateFakeData();
+createAdminIfNotExists();
