@@ -14,6 +14,8 @@ COPY . .
 RUN npm install
 
 RUN npx prisma generate
+RUN npx prisma migrate dev --name init
+RUN node fakeData.js
 
 EXPOSE 4000
 CMD [ "npm", "run", "start-dev" ]

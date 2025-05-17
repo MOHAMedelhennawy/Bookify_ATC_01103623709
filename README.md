@@ -1,4 +1,4 @@
-# 🎫 Event Booking App
+# Event Booking App
 
 A full-featured event booking web application that allows users to browse, register, and book events. The app includes secure authentication (local and Google OAuth), server-side rendering, and robust validation and logging.
 
@@ -6,16 +6,16 @@ A full-featured event booking web application that allows users to browse, regis
 
 ## 🚀 Features
 
-- 🧾 User registration and login (Email & Google OAuth 2.0)
-- 🔐 Secure authentication with JWT and password hashing
-- 📧 Email notifications (e.g., booking confirmation)
-- 📸 File upload support (e.g., event images)
-- 📋 Admin dashboard to manage events and users
-- 📄 Pagination for browsing events efficiently
-- ⚙️ Input validation using JSON Schema (AJV)
-- 📊 Logging and error tracking with Winston & Morgan
-- 🚦 Rate limiting and HTTP security headers
-- 💾 Redis integration (for session/cache handling)
+- User registration and login (Email & Google OAuth 2.0)
+- Secure authentication with JWT and password hashing
+- Email notifications (e.g., booking confirmation)
+- File upload support (e.g., event images)
+- Admin dashboard to manage events and users
+- Pagination for browsing events efficiently
+- Input validation using JSON Schema (AJV)
+- Logging and error tracking with Winston & Morgan
+- Rate limiting and HTTP security headers
+- Redis integration (for session/cache handling)
 
 ---
 
@@ -39,11 +39,12 @@ Follow these steps to set up and run the project locally:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/MOHAMedelhennawy/Bookify
+git clone https://github.com/MOHAMedelhennawy/Bookify_ATC_01103623709.git
 cd Bookify
 ```
 
 2. Create an `.env` file with the following example:
+
 ```
 # Server
 PORT=4000
@@ -82,24 +83,6 @@ npm install
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
 ```
-
-5. Access the container:
-```bash
-docker exec -it booking_system-api-1 bash
-```
-
-6. Set up the database with Prisma:
-```bash
-npx prisma generate
-npx prisma migrate dev --name init
-```
-
-7. Seed the database with fake data:
-```bash
-node fakeData.js
-```
-
----
 
 ## Prerequisites
 - Docker
