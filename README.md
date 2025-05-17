@@ -80,7 +80,7 @@ npm install
 
 4. Build and start the Docker containers:
 ```bash
-docker-compose -f docker-compose.dev.yml up --build
+docker-compose up --build
 ```
 
 5. Access the container:
@@ -96,7 +96,7 @@ npx prisma migrate dev --name init
 
 7. Seed the database with fake data:
 ```bash
-node fakeData.js
+npm run seed
 ```
 
 ---
