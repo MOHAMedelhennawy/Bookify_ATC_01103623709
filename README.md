@@ -40,7 +40,7 @@ Follow these steps to set up and run the project locally:
 
 ```bash
 git clone https://github.com/MOHAMedelhennawy/Bookify_ATC_01103623709.git
-cd Bookify_ATC_01103623709.git
+cd Bookify_ATC_01103623709/
 ```
 
 2. Create an `.env` file with the following example:
