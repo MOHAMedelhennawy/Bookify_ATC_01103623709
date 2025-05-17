@@ -40,11 +40,10 @@ Follow these steps to set up and run the project locally:
 
 ```bash
 git clone https://github.com/MOHAMedelhennawy/Bookify_ATC_01103623709.git
-cd Bookify
+cd Bookify_ATC_01103623709.git
 ```
 
 2. Create an `.env` file with the following example:
-
 ```
 # Server
 PORT=4000
@@ -83,6 +82,24 @@ npm install
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
 ```
+
+5. Access the container:
+```bash
+docker exec -it bookify_atc_01103623709-api-1 bash
+```
+
+6. Set up the database with Prisma:
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+7. Seed the database with fake data:
+```bash
+node fakeData.js
+```
+
+---
 
 ## Prerequisites
 - Docker
