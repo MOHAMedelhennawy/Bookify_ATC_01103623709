@@ -7,10 +7,8 @@
 		"start-dev": "npm run db:init && nodemon src/server.js",
 		"db:init": "npx prisma generate && npx prisma migrate dev --name init && npm run seed",
 		"seed": "node fakeData.js",
-
 		"start": "npm run db:prod && node src/server.js",
 		"db:prod": "npx prisma generate && npx prisma migrate deploy",
-
 		"test": "jest",
 		"lint": "eslint",
 		"lint:fix": "eslint --fix",
@@ -21,6 +19,7 @@
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
+		"@faker-js/faker": "^9.7.0",
 		"@prisma/client": "^6.7.0",
 		"@types/passport-google-oauth20": "^2.0.16",
 		"ajv": "^8.17.1",
@@ -36,16 +35,16 @@
 		"helmet": "^8.1.0",
 		"i": "^0.3.7",
 		"jsonwebtoken": "^9.0.2",
+		"logger": "^0.0.1",
+		"morgan": "^1.10.0",
 		"multer": "^1.4.5-lts.2",
 		"nodemailer": "^7.0.3",
 		"npm": "^10.9.2",
 		"passport": "^0.7.0",
 		"passport-google-oauth20": "^2.0.0",
+		"prisma": "^6.7.0",
 		"redis": "^5.0.1",
-		"logger": "^0.0.1",
-		"@faker-js/faker": "^9.7.0",
-		"winston": "^3.17.0",
-		"prisma": "^6.7.0"
+		"winston": "^3.17.0"
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.27.2",

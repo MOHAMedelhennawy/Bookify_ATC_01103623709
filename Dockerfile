@@ -22,7 +22,6 @@ ENV NODE_ENV=production
 COPY . .
 
 RUN npm install --only=production
-RUN npx prisma generate
 
 EXPOSE 4000
 CMD ["npm", "start"]
