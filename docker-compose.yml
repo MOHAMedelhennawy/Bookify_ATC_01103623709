@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      target: development
+      target: production
     ports:
       - "4000:4000"
     volumes:
@@ -14,7 +14,7 @@ services:
       - .env
     depends_on:
       - db
-    command: npm run start-dev
+    command: npm run start
 
   db:
     image: postgres:15
