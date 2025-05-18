@@ -4,6 +4,11 @@ A full-featured event booking web application that allows users to browse, regis
 
 ---
 
+## Deom
+https://github.com/user-attachments/assets/0dc86e2d-3ff9-4694-8d4e-a4a7054112aa
+
+---
+
 ## 🚀 Features
 
 - User registration and login (Email & Google OAuth 2.0)
