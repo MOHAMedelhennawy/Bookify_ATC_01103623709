@@ -91,7 +91,7 @@ npm install
 
 4. Build and start the Docker containers:
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
 ---
