@@ -7,7 +7,7 @@
 		"start-dev": "npm run db:init && nodemon src/server.js",
 		"db:init": "npx prisma generate && npx prisma migrate dev --name init && npm run seed",
 		"seed": "node fakeData.js",
-		"start": "npm run db:prod && node src/server.js",
+		"start": "node src/server.js",
 		"db:prod": "npx prisma generate && npx prisma migrate deploy",
 		"test": "jest",
 		"lint": "eslint",
