@@ -7,16 +7,19 @@
 	box-sizing: border-box;
 	font-family: "Poppins", sans-serif;
 }
+
 .hero {
+	text-align: center;
+	padding: 4rem 2rem;
 	position: relative;
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
-	/* display: flex; */
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
 }
+
 .hero .wave {
 	position: absolute;
 	left: 0;
@@ -24,8 +27,8 @@
 	height: 100%;
 	background: #4973ff;
 	box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-	transition: 0.5s;
 }
+
 .hero .wave span {
 	content: "";
 	position: absolute;
@@ -34,43 +37,16 @@
 	top: 0;
 	left: 50%;
 	transform: translate(-50%, -75%);
+	background: rgba(20, 20, 20, 0.5);
 	background: #000;
 }
-.content {
-	position: relative;
-	z-index: 1;
-	font-size: 4em;
-	letter-spacing: 2px;
-	color: #fff;
-}
-.hero .wave span:nth-child(1) {
-	border-radius: 45%;
-	background: rgba(20, 20, 20, 1);
-	animation: animate 5s linear infinite;
+
+.hero .logo {
+	animation: logo-animate 1.7s linear;
 }
 
-.hero .wave span:nth-child(2) {
-	border-radius: 40%;
-	background: rgba(20, 20, 20, 0.5);
-	animation: animate 10s linear infinite;
-}
-.hero .wave span:nth-child(3) {
-	border-radius: 42.5%;
-	background: rgba(20, 20, 20, 0.5);
-	animation: animate 15s linear infinite;
-}
-@keyframes animate {
-	0% {
-		transform: translate(-50%, -75%) rotate(0deg);
-	}
-	100% {
-		transform: translate(-50%, -75%) rotate(360deg);
-	}
-}
-
-.hero {
-	text-align: center;
-	padding: 4rem 2rem;
+.hero .logo span {
+	font-size: 11rem;
 }
 
 .hero .logo i {
@@ -78,22 +54,12 @@
 	color: #fff;
 }
 
-.hero .logo {
-	animation: logo-animate 1.7s linear;
-}
-
-@keyframes logo-animate {
-	from {
-		opacity: 0.2;
-		scale: 0.8;
-	}
-	to {
-		opacity: 1;
-		scale: 1;
-	}
-}
-
 .hero .content {
+	position: relative;
+	z-index: 1;
+	font-size: 4em;
+	letter-spacing: 2px;
+	color: #fff;
 	margin-bottom: 16rem;
 }
 
@@ -113,45 +79,6 @@
 	max-width: 700px;
 	margin: 0 auto 2rem;
 	animation: content-animate 3s linear;
-}
-
-@keyframes content-animate {
-	0% {
-		scale: 0.95;
-		opacity: 0;
-	}
-	25% {
-		scale: 0.97;
-		opacity: .25;
-	}
-	75% {
-		scale: 0.99;
-		opacity: .75;
-	}
-	100% {
-		scale: 1;
-		opacity: 1;
-	}
-}
-
-.hero .logo span {
-	font-size: 11rem;
-}
-
-.hero h1 {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-	margin-top: 0.9rem;
-	font-family:
-		Playfair Display,
-		serif;
-	color: black;
-}
-
-.hero p {
-	font-size: larger;
-	max-width: 700px;
-	margin: 0 auto 2rem;
 }
 
 .btn.orange {
