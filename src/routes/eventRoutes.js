@@ -31,10 +31,13 @@ router.post(
 );
 router.put(
 	"/:id",
+	checkCurrentUser,
+	checkUserPrivlages,
 	prepareBodyTypesMiddleware,
 	validateSchema(eventSchemaPut),
 	updateEventByIdController,
 );
+
 router.delete("/:id", deleteEventByIdController);
 
 export default router;

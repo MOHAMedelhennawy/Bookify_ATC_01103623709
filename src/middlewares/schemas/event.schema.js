@@ -71,6 +71,12 @@ export const eventSchemaPost = {
 				type: "Price must be a number.",
 			},
 		},
+		imageUrl: {
+			type: "string",
+			errorMessage: {
+				type: "Image URL must be a string.",
+			},
+		},
 	},
 	required: [
 		"title",
@@ -81,6 +87,7 @@ export const eventSchemaPost = {
 		"description",
 		"venue",
 		"price",
+		"imageUrl"
 	],
 	additionalProperties: false,
 	errorMessage: {
@@ -93,6 +100,7 @@ export const eventSchemaPost = {
 			description: "Description is required.",
 			venue: "Venue is required.",
 			price: "Price is required.",
+			imageUrl: "Image is required",
 		},
 		additionalProperties:
 			"You have included an extra field that is not allowed.",

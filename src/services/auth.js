@@ -10,15 +10,6 @@ const prisma = new PrismaClient();
 
 export const signupUser = (name, email, password) => {
 	return handlePrismaQuery(async () => {
-		if (!name || !email || !password) {
-			throw new AppError(
-				"User data is missing",
-				400,
-				"Make sure that all required data is valid",
-				true,
-			);
-		}
-
 		const cleanName = name.trim();
 		const cleanEmail = email.trim().toLowerCase();
 
@@ -60,6 +51,28 @@ export const signupUser = (name, email, password) => {
 			});
 
 		logger.info("User created successfully on the database");
+		return user;
+	});
+};
+
+export const loginUser = (email, password) => {
+	return handlePrismaQuery(async () => {
+		const user = await prisma.user.findFirst({
+			where: { email: email.trim().toLowerCase() },
+		});
+
+		if (!user || !(await bcrypt.compare(password, user.password))) {
+			throw new AppError(
+				"Invalid credentials",
+				401,
+				"Make sure that your email and password are correct",
+				true,
+			);
+		}
+
+		// eslint-disable-next-line prettier/prettier
+		await redisClient.set(`user:${user.id}`, JSON.stringify(user), { EX: 3600 });
+
 		return user;
 	});
 };
@@ -110,40 +123,10 @@ export const signupOAuthUser = (name, email) => {
 	});
 };
 
-export const loginUser = (email, password) => {
-	return handlePrismaQuery(async () => {
-		if (!email || !password) {
-			throw new AppError(
-				"Missing credentials",
-				400,
-				"Email and password are required",
-				true,
-			);
-		}
-
-		const user = await prisma.user.findFirst({
-			where: { email: email.trim().toLowerCase() },
-		});
-
-		if (!user || !(await bcrypt.compare(password, user.password))) {
-			throw new AppError(
-				"Invalid credentials",
-				401,
-				"Make sure that your email and password are correct",
-				true,
-			);
-		}
-
-		// eslint-disable-next-line prettier/prettier
-		await redisClient.set(`user:${user.id}`, JSON.stringify(user), { EX: 3600 });
-
-		return user;
-	});
-};
-
 export const findUserById = (id) => {
 	return handlePrismaQuery(async () => {
 		logger.info(`Searching in user with ID: ${id}`);
+
 		if (!id) {
 			throw new AppError(
 				"User id is missing!",
@@ -168,8 +151,8 @@ export const findUserById = (id) => {
 
 export const findUserByEmail = (email) => {
 	return handlePrismaQuery(async () => {
-		logger.info("findUserByEmail");
 		logger.info(`Searching in user with Email: ${email}`);
+
 		if (!email) {
 			throw new AppError(
 				"User email is missing!",

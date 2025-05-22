@@ -8,6 +8,7 @@ import {
 	deleteEventByIdServices,
 } from "../services/events.js";
 import { getQueryObject } from "../utils/getQuery.js";
+import AppError from "../utils/AppError.js";
 
 export const getAllEventsController = catchAsync(async (req, res) => {
 	// Pagination, filteration, sorting
@@ -27,6 +28,16 @@ export const getAllEventsController = catchAsync(async (req, res) => {
 
 export const getEventByIdController = catchAsync(async (req, res) => {
 	const { id } = req.params;
+
+	if (!id) {
+		throw new AppError(
+			"Event id is missing!",
+			400,
+			"Please provide a valid event ID in the request.",
+			true,
+		);
+	}
+
 	const event = await getEventByIdServices(id);
 
 	res.status(200).json({
@@ -37,13 +48,19 @@ export const getEventByIdController = catchAsync(async (req, res) => {
 });
 
 export const addNewEventController = catchAsync(async (req, res) => {
-	if (!req.file) {
-		return res.status(400).json({ message: "Image file is required" });
+	const data = req.body;
+
+	if (!data || typeof data !== "object") {
+		throw new AppError(
+			"Missing event data",
+			400,
+			"The request is missing required event data. Please ensure all necessary fields are provided.",
+			true,
+		);
 	}
-	req.body.imageUrl = req.file.filename;
 
 	// Create new event
-	const newEvent = await addNewEventServices(req.body);
+	const newEvent = await addNewEventServices(data);
 
 	// Send response
 	res.status(201).json({
@@ -56,7 +73,27 @@ export const addNewEventController = catchAsync(async (req, res) => {
 
 export const updateEventByIdController = catchAsync(async (req, res) => {
 	const { id } = req.params;
-	const updatedEvent = await updateEventByIdServices(id, req.body);
+	const data = req.body;
+
+	if (!id) {
+		throw new AppError(
+			"Event id is missing!",
+			400,
+			"Please provide a valid event ID in the request.",
+			true,
+		);
+	}
+
+	if (!data || typeof data !== "object") {
+		throw new AppError(
+			"Missing event data",
+			400,
+			"The request is missing required event data. Please ensure all necessary fields are provided.",
+			true,
+		);
+	}
+
+	const updatedEvent = await updateEventByIdServices(id, data);
 
 	res.status(200).json({
 		message: "Event updated successfully.",

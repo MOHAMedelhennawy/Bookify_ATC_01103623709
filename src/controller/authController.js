@@ -9,14 +9,6 @@ import {
 import { generateAuthToken } from "../utils/generateToken.js";
 import AppError from "../utils/AppError.js";
 
-// export const signupGet = () => {
-//     render();
-// };
-//
-// export const loginGet = () => {
-//     render();
-// };
-
 export const signupPost = catchAsync(async (req, res) => {
 	const { name, email, password } = req.body;
 

@@ -75,6 +75,25 @@ export const addNewBookingController = catchAsync(async (req, res) => {
 export const deleteBookingController = catchAsync(async (req, res) => {
 	const { userId, eventId } = req.body;
 
+	// check if user ID and event ID is passed
+	if (!user || !user.id) {
+		throw new AppError(
+			"User ID is missing",
+			400,
+			"You need to be logged in to perform this action. Please log in and try again",
+			true,
+		);
+	}
+
+	if (!eventId) {
+		throw new AppError(
+			"Event ID is missing",
+			400,
+			"Please provide a valid event ID in the request.",
+			true,
+		);
+	}
+
 	await deleteBookingService(userId, eventId);
 
 	res.status(202).json({

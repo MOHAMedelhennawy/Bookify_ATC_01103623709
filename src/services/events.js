@@ -33,15 +33,6 @@ export const getAllEventsServices = async (queryObject) => {
 export const getEventByIdServices = (id) => {
 	// eslint-disable-next-line require-await
 	return handlePrismaQuery(async () => {
-		if (!id) {
-			throw new AppError(
-				"Event id is missing!",
-				400,
-				"Please provide a valid event ID in the request.",
-				true,
-			);
-		}
-
 		const event = prisma.Event.findUnique({ where: { id } });
 
 		if (!event) {
@@ -59,15 +50,6 @@ export const getEventByIdServices = (id) => {
 
 export const addNewEventServices = (data) => {
 	return handlePrismaQuery(async () => {
-		if (!data || typeof data !== "object") {
-			throw new AppError(
-				"Missing event data",
-				400,
-				"The request is missing required event data. Please ensure all necessary fields are provided.",
-				true,
-			);
-		}
-
 		const newEvent = await prisma.event.create({
 			data: {
 				title: data.title,
@@ -89,24 +71,6 @@ export const addNewEventServices = (data) => {
 
 export const updateEventByIdServices = (id, data) => {
 	return handlePrismaQuery(async () => {
-		if (!id) {
-			throw new AppError(
-				"Event id is missing!",
-				400,
-				"Please provide a valid event ID in the request.",
-				true,
-			);
-		}
-
-		if (!data || typeof data !== "object") {
-			throw new AppError(
-				"Missing event data",
-				400,
-				"The request is missing required event data. Please ensure all necessary fields are provided.",
-				true,
-			);
-		}
-
 		const existingEvent = await prisma.Event.findUnique({ where: { id } });
 		if (!existingEvent) {
 			throw new AppError(

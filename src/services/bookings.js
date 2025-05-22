@@ -25,15 +25,6 @@ export const checkExistBooking = (userId, eventId) => {
 
 export const getAllUserBookingServices = (userId) => {
 	return handlePrismaQuery(async () => {
-		if (!userId) {
-			throw new AppError(
-				"Missing user id",
-				400,
-				"The request is missing user id",
-				true,
-			);
-		}
-
 		const cachedBookings = await redisClient.get(redisKey(userId));
 		if (cachedBookings) return JSON.parse(cachedBookings);
 
@@ -54,16 +45,8 @@ export const getAllUserBookingServices = (userId) => {
 
 export const addNewBookingServices = (userId, eventId) => {
 	return handlePrismaQuery(async () => {
-		if (!userId || !eventId) {
-			throw new AppError(
-				"Missing user or event id",
-				400,
-				"The request is missing necessary data",
-				true,
-			);
-		}
-
 		const user = await findUserById(userId);
+	
 		if (!user) {
 			throw new AppError(
 				`No user found with ID: ${userId}`,
@@ -74,6 +57,7 @@ export const addNewBookingServices = (userId, eventId) => {
 		}
 
 		const event = await prisma.Event.findUnique({ where: { id: eventId } });
+
 		if (!event) {
 			throw new AppError(
 				`No event found with ID: ${eventId}`,
@@ -100,18 +84,9 @@ export const addNewBookingServices = (userId, eventId) => {
 
 export const deleteBookingService = (userId, eventId) => {
 	return handlePrismaQuery(async () => {
-		// check if user ID and event ID is passed
-		if (!userId || !eventId) {
-			throw new AppError(
-				"Missing user or event id",
-				400,
-				"The request is missing necessary data",
-				true,
-			);
-		}
-
 		// Check if user exists
 		const user = await findUserById(userId);
+
 		if (!user) {
 			throw new AppError(
 				`No user found with ID: ${userId}`,
@@ -123,6 +98,7 @@ export const deleteBookingService = (userId, eventId) => {
 
 		// Check if event exists
 		const event = await prisma.Event.findUnique({ where: { id: eventId } });
+
 		if (!event) {
 			throw new AppError(
 				`No event found with ID: ${eventId}`,
