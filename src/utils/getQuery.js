@@ -28,6 +28,7 @@ export const getQueryObject = async (req) => {
 	}
 
 	sort = sort ? sort.split(",") : []; // sort=price,desc => sort = ["price", "desc"]
+
 	let sortBy = {};
 	if (sort[0]) {
 		sortBy[sort[0]] = sort[1] || "asc";

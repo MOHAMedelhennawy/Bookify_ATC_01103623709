@@ -1,52 +1,20 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
-import { createEvent, deleteEventById, fetchAllEvents, fetchEventByID, updatedEventById } from "../api/events.js";
+import { createEvent, deleteEventById, fetchEventByID, updatedEventById } from "../api/events.js";
 import { renderCategoriesSelect } from "../main.js";
 import { formatCustomDate, formatDateTime } from "../utils/date.js";
 import { convertDate } from "../utils/date.js";
-import { renderPagination } from "../utils/pagination.js";
 import { showToast } from "../utils/showToast.js";
 
-let limit = 12;
-let searchTerm = "";
-let selectedCategory = "";
-let sortBy = "";
-let sortOrder = "asc";
 let originalEventData = {};
 const eventTableBody = document.querySelector("#eventTableBody");
-const paginationContainer = document.querySelector(".pagination");
 const modal = document.querySelector("#eventModal");
 const addEventBtn = document.querySelector(".addEventBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
 const form = document.querySelector("#eventForm");
 const formTitle = document.querySelector("#formTitle");
 
-const fetchEvents = async (page = 1) => {
-	const query = new URLSearchParams({
-		page,
-		limit,
-		search: searchTerm,
-		category: selectedCategory,
-		sortBy,
-		order: sortOrder,
-	});
-
-	const data = await fetchAllEvents(`?${query.toString()}`);
-
-	if (data?.error) {
-		showToast("error", "Failed to upload events");
-		return;
-	}
-
-	await renderAllEvents(data.events);
-	
-	const totalPages = Math.ceil(data.count / limit);
-	
-	// Render pagination
-	renderPagination(paginationContainer, totalPages, page, fetchEvents);
-};
-
-const renderAllEvents = (events) => {
+const renderEventsInAdmin = (events) => {
 	eventTableBody.innerHTML = "";
 
 	events.forEach((event) => {
@@ -265,5 +233,5 @@ addEventBtn.addEventListener("click", (e) => addEventBtnAction(e));
 cancelBtn.addEventListener("click", closeModal);
 document.addEventListener("DOMContentLoaded", () => {
 	renderCategoriesSelect();
-	fetchEvents();
+	fetchEvents(renderEventsInAdmin);
 });

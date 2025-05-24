@@ -2,12 +2,6 @@ import { addNewBooking } from "./api/books.js";
 import { fetchAllCategories } from "./api/category.js";
 import { showToast } from "./utils/showToast.js";
 
-let limit = 12;
-let searchTerm = "";
-let selectedCategory = "";
-let sortBy = "";
-let sortOrder = "asc";
-
 export const renderCategoriesSelect = async () => {
 	const categorySelect = document.querySelector(".category-select");
 	const data = await fetchAllCategories();

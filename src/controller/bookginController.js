@@ -76,7 +76,7 @@ export const deleteBookingController = catchAsync(async (req, res) => {
 	const { userId, eventId } = req.body;
 
 	// check if user ID and event ID is passed
-	if (!user || !user.id) {
+	if (!userId) {
 		throw new AppError(
 			"User ID is missing",
 			400,
