@@ -17,7 +17,9 @@ export const setInputValue = (selector, value) => {
 };
 
 // eslint-disable-next-line prettier/prettier
-export const setOriginalEventData = (event, eventDateAndTime, categoryName) => {
+export const setOriginalEventData = (event, eventDateAndTime, category) => {
+	const categoryId = form.querySelector(".category-select").selectedOptions[0]?.dataset.id;
+
 	originalEventData = {
 		title: setInputValue("#event-name", event.title),
 		venue: setInputValue("#event-venue", event.venue),
@@ -27,8 +29,9 @@ export const setOriginalEventData = (event, eventDateAndTime, categoryName) => {
 		time: setInputValue("#event-time", eventDateAndTime.time),
 		address: setInputValue("#event-address", event.address),
 		location: setInputValue("#event-location", event.location),
-		category: setInputValue(".category-select", categoryName),
+		category: setInputValue(".category-select", category.value),
 		eventImg: form.querySelector("#event-image").files[0],
+		categoryId: category.dataset.id,
 	};
 
 	return originalEventData;

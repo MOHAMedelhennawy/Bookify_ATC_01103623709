@@ -47,7 +47,7 @@ export const editEventBtnAction = async (e) => {
 	);
 
 	// Fill form and store original values
-	setOriginalEventData(data.event, eventDateAndTime, category.value);
+	setOriginalEventData(data.event, eventDateAndTime, category);
 	form.onsubmit = (e) => updateEvent(e, eventId);
 };
 
