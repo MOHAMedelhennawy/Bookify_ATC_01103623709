@@ -138,7 +138,7 @@ export const eventSchemaPut = {
 				format: "Date must be in a valid date-time format.",
 			},
 		},
-		category: {
+		categoryId: {
 			type: "string",
 			errorMessage: {
 				type: "Category must be a string.",

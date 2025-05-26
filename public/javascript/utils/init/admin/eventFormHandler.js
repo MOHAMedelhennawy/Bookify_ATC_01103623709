@@ -7,7 +7,7 @@ import {
 	originalEventData,
 } from "./eventFormSelectors.js";
 import { createEvent, updatedEventById } from "../../../api/events.js";
-import { appendImageIfExist, getUpdatedFields, handleEventFormResponse } from "./handleEventForm.js";
+import { getUpdatedFields, handleEventFormResponse } from "./handleEventForm.js";
 
 // Add event
 export const addNewEvent = async (e) => {
@@ -47,6 +47,7 @@ export const updateEvent = async (e, eventId) => {
 	e.preventDefault();
 
 	let updatedFields = {};
+	const categoryId = form.querySelector(".category-select").selectedOptions[0]?.dataset.id;
 
 	const currentValues = {
 		title: getInputValue("#event-name"),
@@ -57,6 +58,7 @@ export const updateEvent = async (e, eventId) => {
 		time: getInputValue("#event-time"),
 		address: getInputValue("#event-address"),
 		location: getInputValue("#event-location"),
+		categoryId
 	};
 
 	updatedFields = getUpdatedFields(currentValues, originalEventData);
@@ -68,7 +70,6 @@ export const updateEvent = async (e, eventId) => {
 
 	try {
 		const data = await updatedEventById(eventId, updatedFields);
-
 		handleEventFormResponse("update", data);
 	} catch (err) {
 		showToast("error", "Unexpected error occurred while updating.");

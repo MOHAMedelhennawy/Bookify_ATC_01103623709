@@ -25,7 +25,6 @@ export const addEventBtnAction = (e) => {
 };
 
 // Edit event
-
 export const editEventBtnAction = async (e) => {
 	const editBtn = e.target.closest(".actions .edit");
 	if (!editBtn) return;
