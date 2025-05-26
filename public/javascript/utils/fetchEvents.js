@@ -1,13 +1,10 @@
 import { showToast } from "./showToast.js";
 import { fetchAllEvents } from "../api/events.js";
-import { renderPagination } from "./pagination.js";
 import { getAllFilters } from "./filters/filterState.js";
 
 export const fetchEvents = async (renderEvents, page = 1) => {
 	// eslint-disable-next-line prettier/prettier
-	const { limit, searchTerm, selectedCategory, sortBy } =
-		getAllFilters();
-	const paginationContainer = document.querySelector(".pagination");
+	const { limit, searchTerm, selectedCategory, sortBy } = getAllFilters();
 
 	const query = new URLSearchParams({
 		page,
@@ -28,6 +25,8 @@ export const fetchEvents = async (renderEvents, page = 1) => {
 
 	const totalPages = Math.ceil(data.count / limit);
 
-	// Render pagination
-	renderPagination(paginationContainer, totalPages, page, fetchEvents);
+	return {
+		count: totalPages,
+		limit,
+	};
 };

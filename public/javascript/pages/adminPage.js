@@ -9,6 +9,7 @@ import {
 	closeModal,
 	editEventBtnAction,
 } from "../utils/init/admin/adminListeners.js";
+import { renderPagination } from "../utils/pagination.js";
 
 const renderEventsInAdmin = (events) => {
 	eventTableBody.innerHTML = "";
@@ -24,10 +25,19 @@ const renderEventsInAdmin = (events) => {
 	});
 };
 
+const loadAdminEvents = async (page = 1) => {
+	const paginationContainer = document.querySelector(".pagination");
+	const data = await fetchEvents(renderEventsInAdmin, page);
+
+	if (!data) return;
+
+	renderPagination(paginationContainer, data.count, page, loadAdminEvents);
+}
+
 eventTableBody.addEventListener("click", (e) => editEventBtnAction(e));
 addEventBtn.addEventListener("click", (e) => addEventBtnAction(e));
 cancelBtn.addEventListener("click", closeModal);
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 	renderCategoriesSelect();
-	fetchEvents(renderEventsInAdmin);
+	await loadAdminEvents()
 });

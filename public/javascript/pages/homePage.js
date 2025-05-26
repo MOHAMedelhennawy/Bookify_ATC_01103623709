@@ -4,6 +4,7 @@ import { fetchEvents } from "../utils/fetchEvents.js";
 import { initFiltersListeners } from "../utils/init/filtersListeners.js";
 import { initBookingsListeners } from "../utils/init/bookingListeners.js";
 import { getUserBookingsCached } from "../utils/cachedBookings.js";
+import { renderPagination } from "../utils/pagination.js";
 
 const eventDataMap = new Map();
 const eventsContainer = document.querySelector(".event-cards");
@@ -40,9 +41,18 @@ const renderAllEvents = async (events) => {
 	eventsContainer.appendChild(fragment);
 };
 
+async function loadHomeEvents(page = 1) {
+	const paginationContainer = document.querySelector(".pagination");
+	const data = await fetchEvents(renderAllEvents, page);
+
+	if (!data) return; // handle error
+
+	renderPagination(paginationContainer, data.count, page, loadHomeEvents);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
 	renderCategoriesSelect();
-	await fetchEvents(renderAllEvents);
+	await loadHomeEvents();
 	await initFiltersListeners(renderAllEvents);
 	await initBookingsListeners(eventsContainer, eventDataMap);
 });
