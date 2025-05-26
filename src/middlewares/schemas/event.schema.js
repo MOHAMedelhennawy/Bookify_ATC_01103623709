@@ -87,7 +87,7 @@ export const eventSchemaPost = {
 		"description",
 		"venue",
 		"price",
-		"imageUrl"
+		"imageUrl",
 	],
 	additionalProperties: false,
 	errorMessage: {

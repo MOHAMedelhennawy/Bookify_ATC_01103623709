@@ -1,20 +1,12 @@
-import { getAllUserBookings } from "../api/books.js";
 import { renderCategoriesSelect } from "../main.js";
 import { eventCardHTML } from "../components/eventCard.js";
 import { fetchEvents } from "../utils/fetchEvents.js";
 import { initFiltersListeners } from "../utils/init/filtersListeners.js";
 import { initBookingsListeners } from "../utils/init/bookingListeners.js";
+import { getUserBookingsCached } from "../utils/cachedBookings.js";
 
 const eventDataMap = new Map();
-let cachedUserBookings = null;
 const eventsContainer = document.querySelector(".event-cards");
-
-const getUserBookingsCached = async () => {
-	if (!cachedUserBookings) {
-		cachedUserBookings = await getAllUserBookings();
-	}
-	return cachedUserBookings;
-};
 
 const renderAllEvents = async (events) => {
 	eventsContainer.innerHTML = "";

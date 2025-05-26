@@ -84,6 +84,7 @@ export const updateEventByIdController = catchAsync(async (req, res) => {
 		);
 	}
 
+	console.log(data);
 	if (!data || typeof data !== "object") {
 		throw new AppError(
 			"Missing event data",

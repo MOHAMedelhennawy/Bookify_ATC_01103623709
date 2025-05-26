@@ -9,11 +9,11 @@ export const prepareBodyTypesMiddleware = (req, res, next) => {
 		throw new AppError(
 			"Event image is missing.",
 			400,
-			"Event image file is required "
+			"Event image file is required ",
 		);
 	}
-	
-	if (req?.file?.filename){
+
+	if (req?.file?.filename) {
 		req.body.imageUrl = req.file.filename;
 	}
 
