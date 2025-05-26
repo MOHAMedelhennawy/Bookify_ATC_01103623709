@@ -116,8 +116,42 @@ export const eventSchemaPut = {
 			maxLength: 50,
 			errorMessage: {
 				type: "Title must be a string.",
-				minLength: "Title must be at least 2 characters.",
+				minLength: "Title must be at least 2 characters long.",
 				maxLength: "Title must not exceed 50 characters.",
+			},
+		},
+		date: {
+			type: "string",
+			errorMessage: {
+				type: "Date must be a string.",
+			},
+		},
+		address: {
+			type: "string",
+			minLength: 2,
+			maxLength: 50,
+			errorMessage: {
+				type: "Address must be a string.",
+				minLength: "Address must be at least 2 characters.",
+				maxLength: "Address must not exceed 50 characters.",
+			},
+		},
+		location: {
+			type: "string",
+			minLength: 2,
+			maxLength: 50,
+			errorMessage: {
+				type: "Location must be a string.",
+				minLength: "Location must be at least 2 characters.",
+				maxLength: "Location must not exceed 50 characters.",
+			},
+		},
+		categoryId: {
+			type: "string",
+			format: "uuid",
+			errorMessage: {
+				type: "Category ID must be a string.",
+				format: "Category is required",
 			},
 		},
 		description: {
@@ -128,20 +162,6 @@ export const eventSchemaPut = {
 				type: "Description must be a string.",
 				minLength: "Description must be at least 10 characters.",
 				maxLength: "Description must not exceed 2000 characters.",
-			},
-		},
-		date: {
-			type: "string",
-			format: "date-time",
-			errorMessage: {
-				type: "Date must be a string.",
-				format: "Date must be in a valid date-time format.",
-			},
-		},
-		categoryId: {
-			type: "string",
-			errorMessage: {
-				type: "Category must be a string.",
 			},
 		},
 		venue: {
@@ -156,23 +176,14 @@ export const eventSchemaPut = {
 		},
 		price: {
 			type: "number",
-			priceIsFloat: true,
 			errorMessage: {
 				type: "Price must be a number.",
 			},
 		},
 		imageUrl: {
 			type: "string",
-			format: "uri",
 			errorMessage: {
 				type: "Image URL must be a string.",
-				format: "Image URL must be a valid URI.",
-			},
-		},
-		user: {
-			type: "object",
-			errorMessage: {
-				type: "User must be an object.",
 			},
 		},
 	},
