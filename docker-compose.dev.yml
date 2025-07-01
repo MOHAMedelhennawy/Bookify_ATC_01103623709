@@ -1,20 +1,32 @@
 version: "3.8"
 
 services:
-  api:
+  backend:
     build:
-      context: .
-      target: development
+      context: ./backend
     ports:
       - "4000:4000"
     volumes:
-      - .:/app
+      - ./backend:/app
       - /app/node_modules
     env_file:
-      - .env
+      - ./backend/.env
     depends_on:
       - db
+      - caching
     command: npm run start-dev
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173" # Vite default dev server port
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
 
   db:
     image: postgres:15
@@ -26,11 +38,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata-dev:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   caching:
     image: redis
