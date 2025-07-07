@@ -3,19 +3,24 @@ import cors from "cors";
 import helmet from "helmet";
 import express from "express";
 import { fileURLToPath } from "url";
-import logger from "./config/logger.js";
 import cookieParser from "cookie-parser";
+import { PrismaClient } from "@prisma/client";
+
+// Configrations
+import "./config/passport.js";
 import morganMW from "./config/morgan.js";
 import limiter from "./config/limiter.js";
 import AppError from "./utils/AppError.js";
-import { PrismaClient } from "@prisma/client";
+
+// Routes
 import authRouter from "./routes/authRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+
+// Middlewares
 import { checkCurrentUser, checkUserPrivlages } from "./middlewares/authMW.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
-import "./config/passport.js";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -32,6 +37,7 @@ app.use(cors({
 	credentials: true
   }));
 
+// Middlewares
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -76,15 +82,5 @@ app.all(/(.*)/, (req, res, next) => {
 
 // Global error middleware
 app.use(globalErrorHandler);
-
-// Optional: Prisma disconnect middleware
-app.use(async (req, res, next) => {
-	try {
-		await prisma.$disconnect();
-	} catch (error) {
-		logger.error("Prisma disconnect error:", error);
-	}
-	next();
-});
 
 export default app;

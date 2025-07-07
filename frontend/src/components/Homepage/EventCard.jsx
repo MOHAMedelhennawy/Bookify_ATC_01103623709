@@ -40,7 +40,7 @@ export default function EventCard({ event }) {
           </div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-[#3b82f6] ">View Details</span>
+          {/* <span href={``} className="text-[#3b82f6] ">View Details</span> */}
           <div>
             <button className='text-white bg-[#3b82f6] py-1 px-2 rounded-lg'>Book Now</button>
           </div>

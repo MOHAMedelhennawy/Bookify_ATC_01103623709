@@ -1,4 +1,5 @@
 import { getAllCategoriesService } from "../services/category.js";
+import redisClient from "../config/redisClient.js";
 
 // eslint-disable-next-line no-unused-vars, prettier/prettier
 let categoriesObject = null;
@@ -19,8 +20,9 @@ export const getQueryObject = async (req) => {
 
 	if (!category || category === "All") {
 		categoriesIDs = Object.values(categoriesObject);
-	} else if (categoriesIDs.length === 0) {
-		const categoriesName = req.query.category.split(","); // category=Tech,Helth => category = ["Tech", "Health"]
+	} else {
+		// Handle single category or comma-separated categories
+		const categoriesName = category.split(","); // category=Tech,Health => category = ["Tech", "Health"]
 
 		categoriesIDs = categoriesName
 			.map((name) => categoriesObject[name])
@@ -51,12 +53,19 @@ export const getQueryObject = async (req) => {
 };
 
 const getCategoryMap = async () => {
-	let categoriesObject = {};
-	const categories = await getAllCategoriesService();
+	const cachedCategories = await redisClient.get("categories");
+	if (cachedCategories) {
+		return JSON.parse(cachedCategories);
+	} else {
+		let categoriesObject = {};
+		const categories = await getAllCategoriesService();
 
-	categories.forEach((category) => {
-		categoriesObject[category.name] = category.id;
-	});
-
-	return categoriesObject;
+		categories.forEach((category) => {
+			categoriesObject[category.name] = category.id;
+		});
+		await redisClient.set("categories", JSON.stringify(categoriesObject), {
+			EX: 3600, // 1 hour
+		});
+		return categoriesObject;
+	}
 };

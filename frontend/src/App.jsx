@@ -1,27 +1,7 @@
 // Packages
-import { useState } from 'react'
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
+import router from './routes.jsx'
 
-// Pages
-import Home from './pages/Home'
-import About from './pages/About'
-
-// Components
-import Login from "./components/Auth/Login"
-import Register from "./components/Auth/Register"
-
-import RootLayout from './layouts/RootLayout'
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route element={ <RootLayout /> }>
-      <Route index element={ <Home /> }/>
-      <Route path='About' element={ <About /> }/>
-      <Route path='Login' element={ <Login /> }/>
-      <Route path='Register' element={ <Register /> }/>
-    </Route>
-  )
-)
 function App() {
   return(
     <RouterProvider router={ router }/>
